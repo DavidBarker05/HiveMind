@@ -2,8 +2,9 @@ using System.Collections;
 using UnityEngine;
 using Util.UnityUtils;
 
-public class SingleRaycastGun : Gun
+public class Pistol : Gun
 {
+    [Header("Pistol")]
     [SerializeField, Min(0.01f)]
     float m_AttackRange;
 
@@ -19,7 +20,6 @@ public class SingleRaycastGun : Gun
     public override bool Attack(Transform origin)
     {
         if (!m_bCanAttack || NeedsReloading) return false;
-        if (!m_bCanAttack) return false;
         m_bCanAttack = false;
         --MagazineAmmo;
         if (Shoot(origin, out RaycastHit hitInfo))

@@ -19,7 +19,7 @@ public abstract class Gun : Weapon
     public bool OutOfAmmo => MagazineAmmo + ReserveAmmo == 0;
     public bool MagazineFull => MagazineAmmo == MagazineSize;
 
-    void Start()
+    protected virtual void Start()
     {
         MagazineAmmo = MagazineSize;
         ReserveAmmo = (StartingMagazines - 1) * MagazineSize;
