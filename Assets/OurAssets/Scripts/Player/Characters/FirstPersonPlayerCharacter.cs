@@ -90,6 +90,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         m_CharacterSettings = initData.CharacterSettings;
         m_PausePlayerCharacter = initData.PausePlayerCharacter;
         m_Camera = initData.Camera;
+        m_WeaponComponent.Init();
         HasBeenInitialised = true;
     }
 
@@ -229,7 +230,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         // Melee cancels shooting always when done on same frame
         if (!m_WeaponComponent.CurrentGun || updateData.MeleeAttackStarted) return;
-        if (updateData.DoRecoil = HandleShoot(updateData.ShootPressedThisFrame))
+        updateData.DoRecoil = HandleShoot(updateData.ShootPressedThisFrame);
+        if (updateData.DoRecoil)
         {
             updateData.RecoilAmount = m_WeaponComponent.CurrentGun.Recoil;
             string attackAnim = AttackAnimation(m_WeaponComponent.CurrentGun);

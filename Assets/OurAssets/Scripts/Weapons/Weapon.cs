@@ -12,7 +12,7 @@ public abstract class Weapon : MonoBehaviour
     [field: SerializeField, Min(1)]
     public int Damage { get; private set; }
 
-    protected bool m_bCanAttack;
+    protected bool m_bCanAttack = true;
 
     public abstract bool Attack(Transform origin);
 }

@@ -467,6 +467,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b30667ca2517b74bac46b586858c949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponHandlerComponent
+  m_WeaponSlot: {fileID: 6327216911349181258}
+  m_PistolPrefab: {fileID: 5616132268291718340, guid: 1be89975b76483c4ba15de78caf20b09, type: 3}
 --- !u!1 &5326139109228489439
 GameObject:
   m_ObjectHideFlags: 0
