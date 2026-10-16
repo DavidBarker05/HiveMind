@@ -42,6 +42,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     static string AttackAnimation(Weapon weapon) => weapon switch
     {
         Pistol => "PistolShoot",
+        Rifle => "RifleShoot",
         _ => string.Empty
     };
 

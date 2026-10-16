@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using Util.UnityUtils;
 
-public class Pistol : Gun
+public class SingleRaycastGun : Gun
 {
     [SerializeField, Min(0.01f)]
     float m_AttackRange;
