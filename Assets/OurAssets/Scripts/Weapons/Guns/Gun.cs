@@ -17,6 +17,7 @@ public abstract class Gun : Weapon
 
     public bool NeedsReloading => MagazineAmmo == 0;
     public bool OutOfAmmo => MagazineAmmo + ReserveAmmo == 0;
+    public bool MagazineFull => MagazineAmmo == MagazineSize;
 
     void Start()
     {
@@ -26,10 +27,5 @@ public abstract class Gun : Weapon
 
     public void PickupMagazine() => ReserveAmmo = Mathf.Min(ReserveAmmo + MagazineSize, MaxReserveAmmo);
 
-    public bool Reload()
-    {
-        if (ReserveAmmo == 0) return false;
-        MagazineAmmo += Mathf.Min(MagazineSize - MagazineAmmo, ReserveAmmo);
-        return true;
-    }
+    public void Reload() => MagazineAmmo += Mathf.Min(MagazineSize - MagazineAmmo, ReserveAmmo);
 }

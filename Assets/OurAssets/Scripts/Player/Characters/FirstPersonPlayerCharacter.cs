@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.XR;
 using Util.SystemUtils;
 
 public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
@@ -23,6 +25,8 @@ public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
     public bool ShootReleasedThisFrame { get; set; }
 
     public bool MeleeAttackStarted { get; set; }
+
+    public bool ReloadStarted { get; set; }
     #endregion Input
 
     #region Output
@@ -43,6 +47,13 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         Pistol => "PistolShoot",
         Rifle => "RifleShoot",
+        _ => string.Empty
+    };
+
+    static string ReloadAnimation(Gun gun) => gun switch
+    {
+        Pistol => "PistolReload",
+        Rifle => "RifleReload",
         _ => string.Empty
     };
 
@@ -70,6 +81,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     float m_MovementSpeed;
 
     bool m_bAttackPressedLastFrame = false;
+
+    bool m_bReloading = false;
 
     public override bool HasBeenInitialised { get; protected set; }
 
@@ -224,13 +237,16 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     void HandleWeapons(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
         HandleGun(ref updateData);
+        HandleReload(ref updateData);
         HandleMelee(ref updateData);
     }
 
     void HandleGun(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        // Melee cancels shooting always when done on same frame
-        if (!m_WeaponComponent.CurrentGun || updateData.MeleeAttackStarted) return;
+        if (!m_WeaponComponent.CurrentGun
+            || updateData.MeleeAttackStarted
+            || updateData.ReloadStarted
+            || m_bReloading) return;
         updateData.DoRecoil = HandleShoot(updateData.ShootPressedThisFrame);
         if (updateData.DoRecoil)
         {
@@ -249,6 +265,26 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         return false;
     }
 
+    void HandleReload(ref FirstPersonPlayerCharacterUpdateData updateData)
+    {
+        if (!m_WeaponComponent.CurrentGun
+            || m_WeaponComponent.CurrentGun.MagazineFull
+            || m_bReloading)
+        {
+            updateData.ReloadStarted = false;
+            return;
+        }
+        if (!updateData.ReloadStarted) return;
+        string reloadAnim = ReloadAnimation(m_WeaponComponent.CurrentGun);
+        if (!string.IsNullOrEmpty(reloadAnim))
+        {
+            m_ArmsAnimator.Play(reloadAnim, -1, 0f);
+            m_bReloading = true;
+            StartCoroutine(CheckForPistolReloadEnd());
+        }
+        updateData.ReloadStarted = false;
+    }
+
     void HandleMelee(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
         if (!m_WeaponComponent.CurrentMeleeWeapon)
@@ -260,7 +296,10 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         {
             string attackAnim = AttackAnimation(m_WeaponComponent.CurrentMeleeWeapon);
             if (!string.IsNullOrEmpty(attackAnim))
+            {
                 m_ArmsAnimator.Play(attackAnim, -1, 0f);
+                m_bReloading = false; // Melee cancels reload as to not lock player into defenceless state
+            }
         }
         updateData.MeleeAttackStarted = false;
     }
@@ -271,4 +310,37 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         return false;
     }
     #endregion Weapons
+
+    #region Animations
+    IEnumerator CheckForPistolReloadEnd()
+    {
+        AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
+        while (m_WeaponComponent.CurrentMeleeWeapon
+            && m_bReloading
+            && m_WeaponComponent.CurrentGun is Pistol
+            && stateInfo.IsName("PistolReload") && stateInfo.normalizedTime < 1.0f)
+        {
+            stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
+            yield return null;
+        }
+        m_bReloading = false;
+    }
+    public void HandleAnimationEvent(string eventName)
+    {
+        Debug.Log("Helppppp");
+        switch (eventName)
+        {
+            case "PistolReloadEnded":
+
+                if (m_bReloading && m_WeaponComponent.CurrentGun is Pistol pistol)
+                {
+                    pistol.Reload();
+                    m_bReloading = false;
+                }
+                break;
+            default:
+                throw new System.NotImplementedException("");
+        }
+    }
+    #endregion
 }

@@ -23,4 +23,6 @@ public class WeaponHandlerComponent : MonoBehaviour
 
     public bool Shoot(Transform origin) => CurrentGun.Attack(origin);
     public bool MeleeAttack(Transform origin) => CurrentMeleeWeapon.Attack(origin);
+
+    public void Reload() => CurrentGun.Reload();
 }

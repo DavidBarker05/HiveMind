@@ -19,6 +19,7 @@ public class SingleRaycastGun : Gun
     public override bool Attack(Transform origin)
     {
         if (!m_bCanAttack || NeedsReloading) return false;
+        if (!m_bCanAttack) return false;
         m_bCanAttack = false;
         --MagazineAmmo;
         if (Shoot(origin, out RaycastHit hitInfo))

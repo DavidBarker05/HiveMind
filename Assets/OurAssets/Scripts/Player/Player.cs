@@ -165,7 +165,12 @@ public class Player : MonoBehaviour
 
     public void HandleMeleeInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.MeleeAttackStarted = ctx.started);
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.MeleeAttackStarted |= ctx.started);
+    }
+
+    public void HandleReloadInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.ReloadStarted |= ctx.started);
     }
     #endregion Handle PlayerInput Events
 }
