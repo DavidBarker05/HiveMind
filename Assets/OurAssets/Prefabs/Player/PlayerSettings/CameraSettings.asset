@@ -16,3 +16,7 @@ MonoBehaviour:
   <VerticalSensitivity>k__BackingField: 0.225
   <MinVerticalAngle>k__BackingField: -80
   <MaxVerticalAngle>k__BackingField: 80
+  <RecoilDuration>k__BackingField: 0.1
+  <VerticalFieldOfView>k__BackingField: 70
+  <SprintVerticalFieldOfView>k__BackingField: 80
+  <FieldOfViewTransitionDuration>k__BackingField: 0.2
