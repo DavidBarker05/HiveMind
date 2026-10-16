@@ -39,6 +39,12 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     static readonly float s_Epsilon = 0.05f;
     static readonly float s_SqrEpsilon = s_Epsilon * s_Epsilon;
 
+    static string AttackAnimation(Weapon weapon) => weapon switch
+    {
+        Pistol => "PistolShoot",
+        _ => string.Empty
+    };
+
     [SerializeField]
     GameObject m_Arms;
     [SerializeField]
@@ -223,11 +229,12 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         // Melee cancels shooting always when done on same frame
         if (!m_WeaponComponent.CurrentGun || updateData.MeleeAttackStarted) return;
-        updateData.DoRecoil = HandleShoot(updateData.ShootPressedThisFrame);
-        if (updateData.DoRecoil)
+        if (updateData.DoRecoil = HandleShoot(updateData.ShootPressedThisFrame))
         {
             updateData.RecoilAmount = m_WeaponComponent.CurrentGun.Recoil;
-            m_ArmsAnimator.Play("PistolShoot", -1, 0f);
+            string attackAnim = AttackAnimation(m_WeaponComponent.CurrentGun);
+            if (!string.IsNullOrEmpty(attackAnim))
+                m_ArmsAnimator.Play(attackAnim, -1, 0f);
         }
         m_bAttackPressedLastFrame = updateData.ShootPressedThisFrame && !updateData.ShootReleasedThisFrame;
     }
@@ -246,7 +253,12 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             updateData.MeleeAttackStarted = false;
             return;
         }
-        bool bDoAnim = HandleMeleeAttack(updateData.MeleeAttackStarted);
+        if (HandleMeleeAttack(updateData.MeleeAttackStarted))
+        {
+            string attackAnim = AttackAnimation(m_WeaponComponent.CurrentMeleeWeapon);
+            if (!string.IsNullOrEmpty(attackAnim))
+                m_ArmsAnimator.Play(attackAnim, -1, 0f);
+        }
         updateData.MeleeAttackStarted = false;
     }
 
