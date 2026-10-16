@@ -1,0 +1,42 @@
+using UnityEngine;
+
+public struct CameraInput
+{
+    public Vector2 LookInput;
+}
+
+public class PlayerCamera : MonoBehaviour
+{
+    CameraSettings m_CameraSettings;
+    Vector3 m_EulerAngles;
+
+    public void Init(CameraSettings cameraSettings) => m_CameraSettings = cameraSettings;
+
+    public void ChangeCameraTarget(Transform target)
+    {
+        transform.position = target.position;
+        transform.eulerAngles = target.eulerAngles;
+        m_EulerAngles = target.eulerAngles;
+    }
+
+    public void SetRotation(Quaternion rotation)
+    {
+        transform.rotation = rotation;
+        m_EulerAngles = rotation.eulerAngles;
+    }
+
+    public void UpdateRotation(ref CameraInput input, float deltaTime)
+    {
+        float lY = input.LookInput.y;
+        float lX = input.LookInput.x;
+        float vSens = m_CameraSettings.VerticalSensitivity;
+        float hSens = m_CameraSettings.HorizontalSensitivity;
+        float pitch = lY * vSens;
+        float yaw = lX * hSens;
+        m_EulerAngles.x = Mathf.Clamp(m_EulerAngles.x - pitch, m_CameraSettings.MinVerticalAngle, m_CameraSettings.MaxVerticalAngle);
+        m_EulerAngles.y += yaw;
+        transform.eulerAngles = m_EulerAngles;
+    }
+
+    public void UpdatePosition(Transform target) => transform.position = target.position;
+}
