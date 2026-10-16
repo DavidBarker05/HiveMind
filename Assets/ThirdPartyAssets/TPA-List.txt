@@ -1,0 +1,8 @@
+This is where we will keep a running track of third party assets so the credits screen is easier. When adding a TPA use the following format so we can add them to the credits screen:
+<i>[Asset/Pack Name]</i>
+By [Author/Creator Name]
+<color=#0055AA><u><link="[URL]">[URL]</link></u></color>
+
+Replace anything in square brackets with the actual information (without the square brackets). Anything in <> must be included because they're there to make Text Mesh Pro style it.
+
+## Everything goes below here vvv
