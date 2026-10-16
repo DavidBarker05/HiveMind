@@ -21,18 +21,24 @@ public class Player : MonoBehaviour
 
     PlayerCharacter m_PlayerCharacter;
     IPlayerCharacterUpdateData m_PlayerCharacterUpdateData;
-    CameraInput m_CameraInput;
+    CameraUpdateData m_CameraUpdateData;
+    CameraLateUpdateData m_CameraLateUpdateData;
 
     public PlayerCharacter CurrentPlayerCharacter => m_PlayerCharacter;
 
     void Awake()
     {
         m_PlayerInput = GetComponent<PlayerInput>();
-        m_PlayerCamera.Init(m_PlayerSettings.CameraSettings);
+        m_PlayerCamera.Init(new CameraInitData()
+        {
+            Camera = m_Camera,
+            CameraSettings = m_PlayerSettings.CameraSettings
+        });
         m_PausePlayerCharacter.Init(new PausePlayerCharacterInitData() { Player = this });
         m_MenuPlayerCharacter.Init(new MenuPlayerCharacterInitData() { Player = this });
         ChangeCharacter(m_StartingPlayerCharacter);
-        m_CameraInput = new CameraInput();
+        m_CameraUpdateData = new CameraUpdateData();
+        m_CameraLateUpdateData = new CameraLateUpdateData();
     }
 
     void Update()
@@ -40,11 +46,28 @@ public class Player : MonoBehaviour
         if (!m_PlayerCharacter || !m_PlayerCamera) return;
         SetCursorVisibility(m_PlayerCharacter.MouseVisible);
         m_PlayerCharacterUpdateData.DeltaTime = Time.deltaTime;
-        if (m_PlayerCharacter.DoCameraRotation) m_PlayerCamera.UpdateRotation(ref m_CameraInput, Time.deltaTime);
+        m_CameraUpdateData.DeltaTime = Time.deltaTime;
+        m_CameraUpdateData.DoRecoil = m_PlayerCharacter && m_PlayerCharacter is FirstPersonPlayerCharacter;
+        m_CameraUpdateData.DoCameraRotation = m_PlayerCharacter.DoCameraRotation;
+        m_PlayerCamera.UpdateCamera(ref m_CameraUpdateData);
         m_PlayerCharacter.UpdateCharacter(ref m_PlayerCharacterUpdateData);
+        m_CameraLateUpdateData.DeltaTime = Time.deltaTime;
+        if (m_PlayerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData firstPersonPlayerCharacterUpdateData)
+        {
+            m_CameraLateUpdateData.IsSprinting = firstPersonPlayerCharacterUpdateData.IsSprinting;
+            m_CameraLateUpdateData.DoRecoil = firstPersonPlayerCharacterUpdateData.DoRecoil;
+            m_CameraLateUpdateData.RecoilAmount = firstPersonPlayerCharacterUpdateData.RecoilAmount;
+        }
+        else m_PlayerCamera.ResetFOV();
     }
 
-    void LateUpdate() => m_PlayerCamera.UpdatePosition(m_PlayerCharacter.CameraTarget);
+    void LateUpdate()
+    {
+        m_CameraLateUpdateData.Target = m_PlayerCharacter.CameraTarget;
+        m_PlayerCamera.LateUpdateCamera(ref m_CameraLateUpdateData);
+        if (m_PlayerCharacterUpdateData is FirstPersonPlayerCharacterUpdateData firstPersonPlayerCharacterUpdateData)
+            firstPersonPlayerCharacterUpdateData.DoRecoil = false;
+    }
 
     #region Change Character
     public void ChangeCharacter(PlayerCharacter playerCharacter)
@@ -119,7 +142,7 @@ public class Player : MonoBehaviour
     public void HandleLookInput(InputAction.CallbackContext ctx)
     {
         if (!m_PlayerCharacter.DoCameraRotation) return;
-        m_CameraInput.LookInput = ctx.ReadValue<Vector2>();
+        m_CameraUpdateData.LookInput = ctx.ReadValue<Vector2>();
     }
 
     public void HandleSprintInput(InputAction.CallbackContext ctx)
@@ -130,6 +153,12 @@ public class Player : MonoBehaviour
     public void HandleJumpInput(InputAction.CallbackContext ctx)
     {
         SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.JumpPressedThisFrame = ctx.action.WasPressedThisFrame());
+    }
+
+    public void HandleAttackInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.AttackPressedThisFrame = ctx.action.WasPressedThisFrame());
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.AttackReleasedThisFrame = ctx.action.WasReleasedThisFrame());
     }
     #endregion Handle PlayerInput Events
 }

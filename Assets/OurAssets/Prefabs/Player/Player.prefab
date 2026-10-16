@@ -158,6 +158,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 39e1a4f1-820e-4de2-81f5-d75be4f491c6
     m_ActionName: 'PausePlayer/Pause[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1748119989260981471}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleAttackInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d239f3d5-9c42-440e-b54b-e6385ac911f4
+    m_ActionName: 'Player/Attack[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -327,6 +343,7 @@ GameObject:
   - component: {fileID: 123941155484709079}
   - component: {fileID: 3389705744965587759}
   - component: {fileID: 2748236525323853716}
+  - component: {fileID: 1892419647633264564}
   m_Layer: 0
   m_Name: FirstPersonPlayerCharacter
   m_TagString: Untagged
@@ -389,6 +406,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FirstPersonPlayerCharacter
   <CameraTarget>k__BackingField: {fileID: 2439049054608134618}
+--- !u!114 &1892419647633264564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3563468873916805075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b30667ca2517b74bac46b586858c949, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponHandlerComponent
 --- !u!1 &5326139109228489439
 GameObject:
   m_ObjectHideFlags: 0

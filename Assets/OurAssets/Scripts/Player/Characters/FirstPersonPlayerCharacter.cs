@@ -12,14 +12,26 @@ public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
 
 public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
 {
+    #region Input
     public float DeltaTime { get; set; }
 
     public Vector2 MovementInput { get; set; }
     public bool JumpPressedThisFrame { get; set; }
     public bool SprintPressedThisFrame { get; set; }
+
+    public bool AttackPressedThisFrame { get; set; }
+    public bool AttackReleasedThisFrame { get; set; }
+    #endregion Input
+
+    #region Output
+    public bool IsSprinting { get; set; }
+
+    public bool DoRecoil { get; set; }
+    public float RecoilAmount { get; set; }
+    #endregion
 }
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(CharacterController), typeof(WeaponHandlerComponent))]
 public class FirstPersonPlayerCharacter : PlayerCharacter
 {
     static readonly float s_Epsilon = 0.05f;
@@ -28,6 +40,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     Camera m_Camera;
     CharacterSettings m_CharacterSettings;
     CharacterController m_CC;
+    WeaponHandlerComponent m_WeaponComponent;
 
     bool m_bIsGrounded;
     bool m_bBumpedHead;
@@ -41,7 +54,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     bool m_bIsSprinting;
     float m_MovementSpeed;
-    float m_CurrentFootstepTime;
+
+    bool m_bAttackPressedLastFrame = false;
 
     public override bool HasBeenInitialised { get; protected set; }
 
@@ -51,7 +65,11 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     PausePlayerCharacter m_PausePlayerCharacter;
 
-    void Awake() => m_CC = GetComponent<CharacterController>();
+    void Awake()
+    {
+        m_CC = GetComponent<CharacterController>();
+        m_WeaponComponent = GetComponent<WeaponHandlerComponent>();
+    }
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
@@ -67,6 +85,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
         FirstPersonPlayerCharacterUpdateData updateData = Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         HandleMovement(ref updateData);
+        HandleWeapons(ref updateData);
     }
 
     public override void OnPausePressed()
@@ -85,7 +104,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         UpdateHorizontalVelocity(updateData.MovementInput);
         JumpChecks(updateData.JumpPressedThisFrame);
         UpdateVerticalVelocity(updateData.DeltaTime);
-        HandleCameraFOV(updateData.DeltaTime);
+        updateData.IsSprinting = m_bIsSprinting;
         m_CC.Move(m_Velocity * updateData.DeltaTime);
     }
 
@@ -171,14 +190,23 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         else if (!m_bIsGrounded) UpdateVerticalVelocityWhileFalling(deltaTime);
         else m_Velocity.y = -1f;
     }
-    #endregion
-
-    void HandleCameraFOV(float deltaTime)
-    {
-        float targetFOV = m_bIsSprinting ? m_CharacterSettings.SprintVerticalFieldOfView : m_CharacterSettings.VerticalFieldOfView;
-        float fovRange = Mathf.Abs(m_CharacterSettings.SprintVerticalFieldOfView - m_CharacterSettings.VerticalFieldOfView);
-        float transitionSpeed = m_CharacterSettings.FieldOfViewTransitionDuration > 0f ? fovRange / m_CharacterSettings.FieldOfViewTransitionDuration : float.MaxValue;
-        m_Camera.fieldOfView = Mathf.MoveTowards(m_Camera.fieldOfView, targetFOV, transitionSpeed * deltaTime);
-    }
+    #endregion Update Vertical Velocity
     #endregion Movement
+
+    #region Weapons
+    void HandleWeapons(ref FirstPersonPlayerCharacterUpdateData updateData)
+    {
+        if (!m_WeaponComponent.CurrentWeapon) return;
+        updateData.DoRecoil = HandleAttack(updateData.AttackPressedThisFrame);
+        if (updateData.DoRecoil && m_WeaponComponent.CurrentWeapon is Gun gun) updateData.RecoilAmount = gun.Recoil;
+        m_bAttackPressedLastFrame = updateData.AttackPressedThisFrame && !updateData.AttackReleasedThisFrame;
+    }
+
+    bool HandleAttack(bool bAttackPressedThisFrame)
+    {
+        if (bAttackPressedThisFrame && (!m_bAttackPressedLastFrame || m_WeaponComponent.CurrentWeapon.IsRapidFire))
+            return m_WeaponComponent.Attack(CameraTarget);
+        return false;
+    }
+    #endregion Weapons
 }
