@@ -162,7 +162,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1748119989260981471}
         m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: HandleAttackInput
+        m_MethodName: HandleShootInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -174,6 +174,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: d239f3d5-9c42-440e-b54b-e6385ac911f4
     m_ActionName: 'Player/Attack[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1748119989260981471}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleMeleeInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d2ac4d85-3c5b-4e1e-82e4-33defdba0e91
+    m_ActionName: 'Player/MeleeAttack[/Keyboard/v]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player

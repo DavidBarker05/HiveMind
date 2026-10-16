@@ -3,7 +3,9 @@ using UnityEngine;
 public class WeaponHandlerComponent : MonoBehaviour
 {
 
-    public Weapon CurrentWeapon { get; private set; }
+    public Gun CurrentGun { get; private set; }
+    public MeleeWeapon CurrentMeleeWeapon { get; private set; }
 
-    public bool Attack(Transform origin) => CurrentWeapon.Attack(origin);
+    public bool Shoot(Transform origin) => CurrentGun.Attack(origin);
+    public bool MeleeAttack(Transform origin) => CurrentMeleeWeapon.Attack(origin);
 }

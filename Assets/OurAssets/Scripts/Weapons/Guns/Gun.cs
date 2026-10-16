@@ -3,8 +3,6 @@ using UnityEngine;
 public abstract class Gun : Weapon
 {
     [field: Header("Gun")]
-    [field: SerializeField]
-    public Transform Barrel { get; private set; }
     [field: SerializeField, Min(0.01f)]
     public float Recoil { get; private set; }
     [field: SerializeField, Min(1)]
@@ -13,8 +11,6 @@ public abstract class Gun : Weapon
     public int MagazineSize { get; private set; }
     [field: SerializeField, Min(1)]
     public int StartingMagazines { get; private set; } = 3;
-    [field: SerializeField, Min(0.01f)]
-    public float AttackRange { get; private set; }
 
     public int MagazineAmmo { get; protected set; }
     public int ReserveAmmo { get; protected set; }

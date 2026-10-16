@@ -4,10 +4,13 @@ using Util.UnityUtils;
 
 public class Pistol : Gun
 {
+    [SerializeField, Min(0.01f)]
+    float m_AttackRange;
+
     bool Shoot(Transform origin, out RaycastHit hitInfo) => Physics.Raycast(
         origin: origin.position,
         direction: origin.forward,
-        maxDistance: AttackRange,
+        maxDistance: m_AttackRange,
         hitInfo: out hitInfo,
         layerMask: HittableLayers,
         queryTriggerInteraction: QueryTriggerInteraction.Collide

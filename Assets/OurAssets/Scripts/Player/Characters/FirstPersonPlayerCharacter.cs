@@ -19,8 +19,10 @@ public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
     public bool JumpPressedThisFrame { get; set; }
     public bool SprintPressedThisFrame { get; set; }
 
-    public bool AttackPressedThisFrame { get; set; }
-    public bool AttackReleasedThisFrame { get; set; }
+    public bool ShootPressedThisFrame { get; set; }
+    public bool ShootReleasedThisFrame { get; set; }
+
+    public bool MeleeAttackStarted { get; set; }
     #endregion Input
 
     #region Output
@@ -196,16 +198,40 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     #region Weapons
     void HandleWeapons(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        if (!m_WeaponComponent.CurrentWeapon) return;
-        updateData.DoRecoil = HandleAttack(updateData.AttackPressedThisFrame);
-        if (updateData.DoRecoil && m_WeaponComponent.CurrentWeapon is Gun gun) updateData.RecoilAmount = gun.Recoil;
-        m_bAttackPressedLastFrame = updateData.AttackPressedThisFrame && !updateData.AttackReleasedThisFrame;
+        HandleGun(ref updateData);
+        HandleMelee(ref updateData);
     }
 
-    bool HandleAttack(bool bAttackPressedThisFrame)
+    void HandleGun(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        if (bAttackPressedThisFrame && (!m_bAttackPressedLastFrame || m_WeaponComponent.CurrentWeapon.IsRapidFire))
-            return m_WeaponComponent.Attack(CameraTarget);
+        // Melee cancels shooting always when done on same frame
+        if (!m_WeaponComponent.CurrentGun || updateData.MeleeAttackStarted) return;
+        updateData.DoRecoil = HandleShoot(updateData.ShootPressedThisFrame);
+        if (updateData.DoRecoil) updateData.RecoilAmount = m_WeaponComponent.CurrentGun.Recoil;
+        m_bAttackPressedLastFrame = updateData.ShootPressedThisFrame && !updateData.ShootReleasedThisFrame;
+    }
+
+    bool HandleShoot(bool bAttackPressedThisFrame)
+    {
+        if (bAttackPressedThisFrame && (!m_bAttackPressedLastFrame || m_WeaponComponent.CurrentGun.IsRapidFire))
+            return m_WeaponComponent.Shoot(CameraTarget);
+        return false;
+    }
+
+    void HandleMelee(ref FirstPersonPlayerCharacterUpdateData updateData)
+    {
+        if (!m_WeaponComponent.CurrentMeleeWeapon)
+        {
+            updateData.MeleeAttackStarted = false;
+            return;
+        }
+        bool bDoAnim = HandleMeleeAttack(updateData.MeleeAttackStarted);
+        updateData.MeleeAttackStarted = false;
+    }
+
+    bool HandleMeleeAttack(bool bAttackPressedThisFrame)
+    {
+        if (bAttackPressedThisFrame) return m_WeaponComponent.MeleeAttack(CameraTarget);
         return false;
     }
     #endregion Weapons

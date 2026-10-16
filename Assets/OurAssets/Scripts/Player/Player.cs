@@ -155,10 +155,15 @@ public class Player : MonoBehaviour
         SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.JumpPressedThisFrame = ctx.action.WasPressedThisFrame());
     }
 
-    public void HandleAttackInput(InputAction.CallbackContext ctx)
+    public void HandleShootInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.AttackPressedThisFrame = ctx.action.WasPressedThisFrame());
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.AttackReleasedThisFrame = ctx.action.WasReleasedThisFrame());
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.ShootPressedThisFrame = ctx.action.WasPressedThisFrame());
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.ShootReleasedThisFrame = ctx.action.WasReleasedThisFrame());
+    }
+
+    public void HandleMeleeInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.MeleeAttackStarted = ctx.started);
     }
     #endregion Handle PlayerInput Events
 }
