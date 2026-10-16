@@ -42,6 +42,10 @@ public class PausePlayerCharacter : PlayerCharacter
 
     public override void OnPausePressed() => ResumeGame();
 
+    public override void OnCharacterEnter() => Sys.Assert(HasBeenInitialised, "PausePlayerCharacter hasn't been initialised!");
+
+    public override void OnCharacterExit() => Sys.Assert(HasBeenInitialised, "PausePlayerCharacter hasn't been initialised!");
+
     public void PauseGame(PlayerCharacter characterToSwitchBackTo)
     {
         Sys.Assert(HasBeenInitialised, "PausePlayerCharacter hasn't been initialised!");

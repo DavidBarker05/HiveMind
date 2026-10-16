@@ -39,6 +39,11 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     static readonly float s_Epsilon = 0.05f;
     static readonly float s_SqrEpsilon = s_Epsilon * s_Epsilon;
 
+    [SerializeField]
+    GameObject m_Arms;
+    [SerializeField]
+    Animator m_ArmsAnimator;
+
     Camera m_Camera;
     CharacterSettings m_CharacterSettings;
     CharacterController m_CC;
@@ -94,6 +99,18 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
         m_PausePlayerCharacter.PauseGame(this);
+    }
+
+    public override void OnCharacterEnter()
+    {
+        Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
+        if (m_Arms) m_Arms.SetActive(true);
+    }
+
+    public override void OnCharacterExit()
+    {
+        Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
+        if (m_Arms) m_Arms.SetActive(false);
     }
 
     #region Movement
@@ -207,7 +224,11 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         // Melee cancels shooting always when done on same frame
         if (!m_WeaponComponent.CurrentGun || updateData.MeleeAttackStarted) return;
         updateData.DoRecoil = HandleShoot(updateData.ShootPressedThisFrame);
-        if (updateData.DoRecoil) updateData.RecoilAmount = m_WeaponComponent.CurrentGun.Recoil;
+        if (updateData.DoRecoil)
+        {
+            updateData.RecoilAmount = m_WeaponComponent.CurrentGun.Recoil;
+            m_ArmsAnimator.Play("PistolShoot", -1, 0f);
+        }
         m_bAttackPressedLastFrame = updateData.ShootPressedThisFrame && !updateData.ShootReleasedThisFrame;
     }
 

@@ -73,12 +73,14 @@ public class Player : MonoBehaviour
     public void ChangeCharacter(PlayerCharacter playerCharacter)
     {
         if (!playerCharacter) return;
+        if (m_PlayerCharacter) m_PlayerCharacter.OnCharacterExit();
         m_PlayerCharacter = playerCharacter;
         if (!m_PlayerCharacter.HasBeenInitialised) m_PlayerCharacter.Init(PlayerCharacterInitData);
         m_PlayerCharacterUpdateData = PlayerCharacterUpdateData;
         if (!string.IsNullOrWhiteSpace(m_PlayerCharacter.ActionMap)) m_PlayerInput.SwitchCurrentActionMap(m_PlayerCharacter.ActionMap);
         m_PlayerCamera.ChangeCameraTarget(m_PlayerCharacter.CameraTarget);
         SetCursorVisibility(m_PlayerCharacter.MouseVisible);
+        if (m_PlayerCharacter) m_PlayerCharacter.OnCharacterEnter();
     }
 
     IPlayerCharacterInitData PlayerCharacterInitData => m_PlayerCharacter switch

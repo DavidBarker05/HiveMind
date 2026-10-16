@@ -39,6 +39,10 @@ public class MenuPlayerCharacter : PlayerCharacter
 
     public override void OnPausePressed() => Sys.Assert(HasBeenInitialised, "MenuPlayerCharacter hasn't been initialised");
 
+    public override void OnCharacterEnter() => Sys.Assert(HasBeenInitialised, "MenuPlayerCharacter hasn't been initialised!");
+
+    public override void OnCharacterExit() => Sys.Assert(HasBeenInitialised, "MenuPlayerCharacter hasn't been initialised!");
+
     public void OnMenuOpen(PlayerCharacter currentCharacter, GameObject currentUI, GameObject newUI)
     {
         Sys.Assert(HasBeenInitialised, "MenuPlayerCharacter hasn't been initialised");
