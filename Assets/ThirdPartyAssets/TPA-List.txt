@@ -10,3 +10,11 @@ Replace anything in square brackets with the actual information (without the squ
 <i>FPS ARMS - PSX / PS1 STYLE</i>
 By CemCakirca
 <color=#0055AA><u><link="https://cemcakirca.itch.io/fps-arms-psx-style">https://cemcakirca.itch.io/fps-arms-psx-style</link></u></color>
+
+<i>Zombie</i>
+By Max Damage
+<color=#0055AA><u><link="https://maximumdamage.itch.io/zombie">https://maximumdamage.itch.io/zombie</link></u></color>
+
+<i>Baked Animation Meshes (Scripts)</i>
+By LlamAcademy
+<color=#0055AA><u><link="https://github.com/llamacademy/baked-animation-meshes">https://github.com/llamacademy/baked-animation-meshes</link></u></color>

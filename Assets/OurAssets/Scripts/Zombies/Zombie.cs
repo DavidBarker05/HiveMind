@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(CapsuleCollider), typeof(NavMeshAgent))]
+[RequireComponent(typeof(CapsuleCollider), typeof(NavMeshAgent), typeof(AnimatedMesh))]
 public class Zombie : MonoBehaviour
 {
     [SerializeField, Min(0.01f)]
@@ -19,6 +19,7 @@ public class Zombie : MonoBehaviour
     void Start()
     {
         m_Player = FindAnyObjectByType<FirstPersonPlayerCharacter>();
+        GetComponent<AnimatedMesh>().Play("run");
         StartCoroutine(TargetUpdate());
     }
 
@@ -34,7 +35,7 @@ public class Zombie : MonoBehaviour
     {
         while (m_Player)
         {
-            m_Agent.SetDestination(m_Player.transform.position);
+            //m_Agent.SetDestination(m_Player.transform.position);
             yield return new WaitForSeconds(1f / m_TargetPositionUpdateFrequency);
         }
     }

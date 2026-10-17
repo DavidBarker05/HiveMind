@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35a81ee22d4d8294386cec8ed0a00035, type: 3}
+  m_Name: Zombie animations
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatedMeshScriptableObject
+  AnimationFPS: 15
+  Animations:
+  - Name: run
+    Meshes:
+    - {fileID: 4300000, guid: f15959604cf4b004dbd0ee6efec37abd, type: 2}
+    - {fileID: 4300000, guid: f265ef297f37fe6409c8343cc89ab85f, type: 2}
+    - {fileID: 4300000, guid: dfaf800d0a74d714892f4547a874757b, type: 2}
+    - {fileID: 4300000, guid: 1d818f21428ac0649afc5c71b55a1f5d, type: 2}
+    - {fileID: 4300000, guid: c8077ae573771c640814608ad40eccd1, type: 2}
+    - {fileID: 4300000, guid: ee6dfe8fe6d106f478a2644c4d845e22, type: 2}
+    - {fileID: 4300000, guid: c47e96f9b6c85f747807cbb49227208f, type: 2}
+    - {fileID: 4300000, guid: df99c65096f0740428ab8aa1da1771ea, type: 2}
+    - {fileID: 4300000, guid: ad78a5c352308b24c861eb411badad92, type: 2}
+    - {fileID: 4300000, guid: 3bceacd62e1e2da469462a3ad9b46fff, type: 2}
+    - {fileID: 4300000, guid: 3e906c5f9c1f6994d8ba42eb1d86a12c, type: 2}
+    - {fileID: 4300000, guid: 7002a55f49d585b45ab745a72de353a2, type: 2}
