@@ -379,6 +379,9 @@ MonoBehaviour:
   highQualityFiltering:
     m_OverrideState: 1
     m_Value: 0
+  filter:
+    m_OverrideState: 1
+    m_Value: 0
   downscale:
     m_OverrideState: 1
     m_Value: 0
@@ -465,6 +468,45 @@ MonoBehaviour:
   - {fileID: -6288072647309666549}
   - {fileID: 7518938298396184218}
   - {fileID: -1410297666881709256}
+  - {fileID: 336983225522118491}
+--- !u!114 &336983225522118491
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54ccac7a7b193e24b838948044c40846, type: 3}
+  m_Name: RetroPostProcessEffect
+  m_EditorClassIdentifier: Assembly-CSharp::RetroPostProcessEffect
+  active: 1
+  UsesFixedResolution:
+    m_OverrideState: 1
+    m_Value: 0
+  PixelScale:
+    m_OverrideState: 1
+    m_Value: 5
+  FixedVerticalResolution:
+    m_OverrideState: 1
+    m_Value: 480
+  ColorDepth:
+    m_OverrideState: 1
+    m_Value: 0.15
+  DitherPattern:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+    dimension: 1
+  DitherPatternScale:
+    m_OverrideState: 0
+    m_Value: 1
+  DitherThreshold:
+    m_OverrideState: 0
+    m_Value: 0.75
+  DitherIntensity:
+    m_OverrideState: 0
+    m_Value: 0.15
 --- !u!114 &853819529557874667
 MonoBehaviour:
   m_ObjectHideFlags: 3

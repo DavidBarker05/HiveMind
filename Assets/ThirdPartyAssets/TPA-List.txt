@@ -18,3 +18,7 @@ By Max Damage
 <i>Baked Animation Meshes (Scripts)</i>
 By LlamAcademy
 <color=#0055AA><u><link="https://github.com/llamacademy/baked-animation-meshes">https://github.com/llamacademy/baked-animation-meshes</link></u></color>
+
+<i>Retro 3D Shader Pack for Unity</i>
+By LEAKYFINGERS
+<color=#0055AA><u><link="https://leakyfingers.itch.io/retro-3d-shader-pack-for-unity">https://leakyfingers.itch.io/retro-3d-shader-pack-for-unity</link></u></color>
