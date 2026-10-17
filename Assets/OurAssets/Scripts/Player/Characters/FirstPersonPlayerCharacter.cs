@@ -47,6 +47,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         Pistol => "PistolShoot",
         Rifle => "RifleShoot",
         GrenadeLauncher => "GrenadeLauncherShoot",
+        Shotgun => "ShotgunShoot",
         Katana => "KatanaSlice",
         Bat => "BatBash",
         _ => string.Empty
@@ -57,6 +58,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         Pistol => "PistolReload",
         Rifle => "RifleReload",
         GrenadeLauncher => "GrenadeLauncherReload",
+        Shotgun => "ShotgunReload",
         _ => string.Empty
     };
 
@@ -65,6 +67,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         Pistol => self.CheckForPistolReloadEnd(),
         Rifle => self.CheckForRifleReloadEnd(),
         GrenadeLauncher => self.CheckForGrenadeLauncherReloadEnd(),
+        Shotgun => self.CheckForShotgunReloadEnd(),
         _ => null
     };
 
@@ -94,6 +97,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     bool m_bAttackPressedLastFrame = false;
 
     bool m_bReloading = false;
+    bool m_bReloadCancelled = false;
 
     public override bool HasBeenInitialised { get; protected set; }
 
@@ -318,7 +322,11 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             if (!string.IsNullOrEmpty(attackAnim))
             {
                 m_ArmsAnimator.Play(attackAnim, -1, 0f);
-                m_bReloading = false; // Melee cancels reload as to not lock player into defenceless state
+                if (m_bReloading)
+                {
+                    m_bReloading = false; // Melee cancels reload as to not lock player into defenceless state
+                    m_bReloadCancelled = true;
+                }
             }
         }
         updateData.MeleeAttackStarted = false;
@@ -344,7 +352,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             yield return null;
         }
         m_bReloading = false;
-        if (m_WeaponComponent.CurrentGun is Pistol pistol) pistol.Reload();
+        if (m_bReloadCancelled) m_bReloadCancelled = false;
+        else if (m_WeaponComponent.CurrentGun is Pistol pistol) pistol.Reload();
     }
 
     IEnumerator CheckForRifleReloadEnd()
@@ -359,7 +368,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             yield return null;
         }
         m_bReloading = false;
-        if (m_WeaponComponent.CurrentGun is Rifle rifle) rifle.Reload();
+        if (m_bReloadCancelled) m_bReloadCancelled = false;
+        else if (m_WeaponComponent.CurrentGun is Rifle rifle) rifle.Reload();
     }
 
     IEnumerator CheckForGrenadeLauncherReloadEnd()
@@ -374,7 +384,24 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             yield return null;
         }
         m_bReloading = false;
-        if (m_WeaponComponent.CurrentGun is GrenadeLauncher grenadeLauncher) grenadeLauncher.Reload();
+        if (m_bReloadCancelled) m_bReloadCancelled = false;
+        else if (m_WeaponComponent.CurrentGun is GrenadeLauncher grenadeLauncher) grenadeLauncher.Reload();
+    }
+
+    IEnumerator CheckForShotgunReloadEnd()
+    {
+        AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
+        while (m_WeaponComponent.CurrentGun
+            && m_bReloading
+            && m_WeaponComponent.CurrentGun is Shotgun
+            && stateInfo.IsName("ShotgunReload") && stateInfo.normalizedTime < 1.0f)
+        {
+            stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
+            yield return null;
+        }
+        m_bReloading = false;
+        if (m_bReloadCancelled) m_bReloadCancelled = false;
+        else if (m_WeaponComponent.CurrentGun is Shotgun shotgun) shotgun.Reload();
     }
     #endregion
 }
