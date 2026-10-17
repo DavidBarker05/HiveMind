@@ -556,7 +556,7 @@ MonoBehaviour:
   m_GrenadeLauncherPrefab: {fileID: 0}
   m_ShotgunPrefab: {fileID: 0}
   m_BatPrefab: {fileID: 0}
-  m_KatanaPrefab: {fileID: 0}
+  m_KatanaPrefab: {fileID: 6092492026217653128, guid: f789143314b98fc4b8fb18a8f25fba84, type: 3}
 --- !u!1 &3636553792404819928
 GameObject:
   m_ObjectHideFlags: 0
