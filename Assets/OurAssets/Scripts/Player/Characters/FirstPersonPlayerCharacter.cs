@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Util.SystemUtils;
@@ -20,12 +21,35 @@ public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
     public bool JumpPressedThisFrame { get; set; }
     public bool SprintPressedThisFrame { get; set; }
 
-    public bool ShootPressedThisFrame { get; set; }
-    public bool ShootReleasedThisFrame { get; set; }
+    long m_InputCounter;
+    public long NextInputOrder() => ++m_InputCounter;
 
-    public bool MeleeAttackStarted { get; set; }
+    public bool ShootHeld { get; set; }
+    public bool ShootReleased { get; set; }
+    public long ShootStartedOrder { get; set; }
 
-    public bool ReloadStarted { get; set; }
+    public long MeleeOrder { get; set; }
+
+    public long ReloadOrder { get; set; }
+
+    public long EquipOrder { get; set; }
+    public Type EquipTarget { get; private set; }
+
+    public void RequestEquip<T>() where T : Gun
+    {
+        EquipOrder = NextInputOrder();
+        EquipTarget = typeof(T);
+    }
+
+    public void ClearWeaponRequests()
+    {
+        ShootReleased = false;
+        ShootStartedOrder = 0;
+        MeleeOrder = 0;
+        ReloadOrder = 0;
+        EquipOrder = 0;
+        EquipTarget = null;
+    }
     #endregion Input
 
     #region Output
@@ -48,8 +72,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         Rifle => "RifleShoot",
         GrenadeLauncher => "GrenadeLauncherShoot",
         Shotgun => "ShotgunShoot",
-        Katana => "KatanaSlice",
         Bat => "BatBash",
+        Katana => "KatanaSlice",
         _ => string.Empty
     };
 
@@ -94,7 +118,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     bool m_bIsSprinting;
     float m_MovementSpeed;
 
-    bool m_bAttackPressedLastFrame = false;
+    bool m_bMeleeing = false;
 
     bool m_bReloading = false;
     bool m_bReloadCancelled = false;
@@ -253,89 +277,113 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     #endregion Movement
 
     #region Weapons
+    enum WeaponAction { Shoot, Reload, Melee, SwitchWeapon }
+
     void HandleWeapons(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        HandleGun(ref updateData);
-        HandleReload(ref updateData);
-        HandleMelee(ref updateData);
+        if (updateData.ShootReleased && m_WeaponComponent.CurrentGun is Rifle rifle) rifle.StopAttacking();
+        if (!m_bMeleeing) ResolveWeaponActions(ref updateData);
+        updateData.ClearWeaponRequests();
     }
 
-    void HandleGun(ref FirstPersonPlayerCharacterUpdateData updateData)
+    void ResolveWeaponActions(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        if (!m_WeaponComponent.CurrentGun
-            || updateData.MeleeAttackStarted
-            || updateData.ReloadStarted
-            || m_bReloading) return;
-        updateData.DoRecoil = HandleShoot(updateData.ShootPressedThisFrame);
-        if (updateData.DoRecoil)
+        bool bAnyStarted = false;
+        bool bHandled = false;
+        bool bOnlyReloadLeft = false;
+        long limit = long.MaxValue;
+        while (!bHandled && NextWeaponAction(ref updateData, limit, out WeaponAction action, out long order))
         {
-            updateData.RecoilAmount = m_WeaponComponent.CurrentGun.Recoil;
-            string attackAnim = AttackAnimation(m_WeaponComponent.CurrentGun);
-            if (!string.IsNullOrEmpty(attackAnim))
-                m_ArmsAnimator.Play(attackAnim, -1, 0f);
-        }
-        m_bAttackPressedLastFrame = updateData.ShootPressedThisFrame && !updateData.ShootReleasedThisFrame;
-        if (m_WeaponComponent.CurrentGun is Rifle rifle && updateData.ShootReleasedThisFrame)
-            rifle.StopAttacking();
-    }
-
-    bool HandleShoot(bool bAttackPressedThisFrame)
-    {
-        if (bAttackPressedThisFrame && (!m_bAttackPressedLastFrame || m_WeaponComponent.CurrentGun.IsRapidFire))
-            return m_WeaponComponent.Shoot(CameraTarget);
-        return false;
-    }
-
-    void HandleReload(ref FirstPersonPlayerCharacterUpdateData updateData)
-    {
-        if (!m_WeaponComponent.CurrentGun
-            || m_WeaponComponent.CurrentGun.MagazineFull
-            || m_bReloading)
-        {
-            updateData.ReloadStarted = false;
-            return;
-        }
-        if (!updateData.ReloadStarted) return;
-        string reloadAnim = ReloadAnimation(m_WeaponComponent.CurrentGun);
-        IEnumerator reloadEndCheck = ReloadCheckEnd(this, m_WeaponComponent.CurrentGun);
-        if (!string.IsNullOrEmpty(reloadAnim) && reloadEndCheck != null)
-        {
-            m_ArmsAnimator.Play(reloadAnim, -1, 0f);
-            m_bReloading = true;
-            StartCoroutine(reloadEndCheck);
-            if (m_WeaponComponent.CurrentGun is Rifle rifle)
-                rifle.StopAttacking();
-        }
-        updateData.ReloadStarted = false;
-    }
-
-    void HandleMelee(ref FirstPersonPlayerCharacterUpdateData updateData)
-    {
-        if (!m_WeaponComponent.CurrentMeleeWeapon)
-        {
-            updateData.MeleeAttackStarted = false;
-            return;
-        }
-        if (HandleMeleeAttack(updateData.MeleeAttackStarted))
-        {
-            string attackAnim = AttackAnimation(m_WeaponComponent.CurrentMeleeWeapon);
-            if (!string.IsNullOrEmpty(attackAnim))
+            bAnyStarted = true;
+            limit = order;
+            if (bOnlyReloadLeft && action != WeaponAction.Reload) continue;
+            switch (action)
             {
-                m_ArmsAnimator.Play(attackAnim, -1, 0f);
-                if (m_bReloading)
-                {
-                    m_bReloading = false; // Melee cancels reload as to not lock player into defenceless state
-                    m_bReloadCancelled = true;
-                }
+                case WeaponAction.Shoot:
+                    bHandled = TryShoot(ref updateData);
+                    break;
+                case WeaponAction.Reload:
+                    TryReload();
+                    bHandled = true;
+                    break;
+                case WeaponAction.Melee:
+                    bHandled = TryMelee();
+                    bOnlyReloadLeft = !bHandled;
+                    break;
+                case WeaponAction.SwitchWeapon:
+                    TrySwitchWeapon(ref updateData);
+                    bHandled = true;
+                    break;
             }
         }
-        updateData.MeleeAttackStarted = false;
+        if (!bAnyStarted && updateData.ShootHeld && m_WeaponComponent.CurrentGun && m_WeaponComponent.CurrentGun.IsRapidFire)
+            TryShoot(ref updateData);
     }
 
-    bool HandleMeleeAttack(bool bAttackPressedThisFrame)
+    bool NextWeaponAction(ref FirstPersonPlayerCharacterUpdateData updateData, long limit, out WeaponAction action, out long order)
     {
-        if (bAttackPressedThisFrame) return m_WeaponComponent.MeleeAttack(CameraTarget);
-        return false;
+        action = default;
+        order = 0;
+        if (IsNewer(updateData.ShootStartedOrder, order, limit)) { action = WeaponAction.Shoot; order = updateData.ShootStartedOrder; }
+        if (IsNewer(updateData.ReloadOrder, order, limit)) { action = WeaponAction.Reload; order = updateData.ReloadOrder; }
+        if (IsNewer(updateData.MeleeOrder, order, limit)) { action = WeaponAction.Melee; order = updateData.MeleeOrder; }
+        if (IsNewer(updateData.EquipOrder, order, limit)) { action = WeaponAction.SwitchWeapon; order = updateData.EquipOrder; }
+        return order > 0;
+    }
+
+    static bool IsNewer(long candidate, long best, long limit) => candidate > 0 && candidate < limit && candidate > best;
+
+    bool TryShoot(ref FirstPersonPlayerCharacterUpdateData updateData)
+    {
+        Gun gun = m_WeaponComponent.CurrentGun;
+        if (!gun || !m_WeaponComponent.Shoot(CameraTarget)) return false;
+        CancelReload();
+        updateData.DoRecoil = true;
+        updateData.RecoilAmount = gun.Recoil;
+        string attackAnim = AttackAnimation(gun);
+        if (!string.IsNullOrEmpty(attackAnim)) m_ArmsAnimator.Play(attackAnim, -1, 0f);
+        return true;
+    }
+
+    void TryReload()
+    {
+        Gun gun = m_WeaponComponent.CurrentGun;
+        if (!gun || gun.MagazineFull || gun.ReserveAmmo <= 0 || m_bReloading) return;
+        string reloadAnim = ReloadAnimation(gun);
+        IEnumerator reloadEndCheck = ReloadCheckEnd(this, gun);
+        if (string.IsNullOrEmpty(reloadAnim) || reloadEndCheck == null) return;
+        m_ArmsAnimator.Play(reloadAnim, -1, 0f);
+        m_bReloading = true;
+        StartCoroutine(reloadEndCheck);
+        if (gun is Rifle rifle) rifle.StopAttacking();
+    }
+
+    bool TryMelee()
+    {
+        MeleeWeapon melee = m_WeaponComponent.CurrentMeleeWeapon;
+        if (!melee || !m_WeaponComponent.MeleeAttack(CameraTarget)) return false;
+        CancelReload(); // Melee cancels reload as to not lock player into defenceless state
+        if (m_WeaponComponent.CurrentGun is Rifle rifle) rifle.StopAttacking();
+        string attackAnim = AttackAnimation(melee);
+        if (!string.IsNullOrEmpty(attackAnim))
+        {
+            m_ArmsAnimator.Play(attackAnim, -1, 0f);
+            m_bMeleeing = true;
+            StartCoroutine(CheckForMeleeAttackEnd(attackAnim));
+        }
+        return true;
+    }
+
+    void TrySwitchWeapon(ref FirstPersonPlayerCharacterUpdateData updateData)
+    {
+        if (updateData.EquipTarget != null && m_WeaponComponent.Equip(updateData.EquipTarget)) CancelReload();
+    }
+
+    void CancelReload()
+    {
+        if (!m_bReloading) return;
+        m_bReloading = false;
+        m_bReloadCancelled = true;
     }
     #endregion Weapons
 
@@ -402,6 +450,24 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         m_bReloading = false;
         if (m_bReloadCancelled) m_bReloadCancelled = false;
         else if (m_WeaponComponent.CurrentGun is Shotgun shotgun) shotgun.Reload();
+    }
+
+    IEnumerator CheckForMeleeAttackEnd(string attackAnim)
+    {
+        int framesToEnter = 2;
+        bool bEntered = false;
+        while (true)
+        {
+            AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
+            if (stateInfo.IsName(attackAnim))
+            {
+                bEntered = true;
+                if (stateInfo.normalizedTime >= 1.0f) break;
+            }
+            else if (bEntered || --framesToEnter < 0) break;
+            yield return null;
+        }
+        m_bMeleeing = false;
     }
     #endregion
 }

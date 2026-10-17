@@ -207,6 +207,70 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 265805af-4659-44a7-b7a0-98ce70b8a9c2
     m_ActionName: 'Player/Reload[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1748119989260981471}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleEquipPistolInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 370fa60f-8f37-4e40-952a-6e43472a6587
+    m_ActionName: 'Player/EquipPistol[/Keyboard/1]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1748119989260981471}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleEquipRifleInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9ede26d0-ffd7-4a27-a044-c6acbcbcbb56
+    m_ActionName: 'Player/EquipRifle[/Keyboard/2]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1748119989260981471}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleEquipGrenadeLauncherInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 45b69208-a46d-4a88-9cdb-b28647d59d1f
+    m_ActionName: 'Player/EquipGrenadeLauncher[/Keyboard/3]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1748119989260981471}
+        m_TargetAssemblyTypeName: Player, Assembly-CSharp
+        m_MethodName: HandleEquipShotgunInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 574a65bd-d077-4738-9861-184e9b6daa8d
+    m_ActionName: 'Player/EquipShotgun[/Keyboard/4]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -489,6 +553,10 @@ MonoBehaviour:
   m_WeaponSlot: {fileID: 6327216911349181258}
   m_PistolPrefab: {fileID: 5616132268291718340, guid: 1be89975b76483c4ba15de78caf20b09, type: 3}
   m_RiflePrefab: {fileID: 190411219736871896, guid: 7563bcf242598764782031f0c8120d0d, type: 3}
+  m_GrenadeLauncherPrefab: {fileID: 0}
+  m_ShotgunPrefab: {fileID: 0}
+  m_BatPrefab: {fileID: 0}
+  m_KatanaPrefab: {fileID: 0}
 --- !u!1 &3636553792404819928
 GameObject:
   m_ObjectHideFlags: 0

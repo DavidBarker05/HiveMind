@@ -157,20 +157,70 @@ public class Player : MonoBehaviour
         SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.JumpPressedThisFrame = ctx.action.WasPressedThisFrame());
     }
 
+    // Weapon inputs record the order they arrived in so the character can tell which one was done last within a frame
     public void HandleShootInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.ShootPressedThisFrame = ctx.action.WasPressedThisFrame());
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.ShootReleasedThisFrame = ctx.action.WasReleasedThisFrame());
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData =>
+        {
+            if (ctx.started)
+            {
+                updateData.ShootHeld = true;
+                updateData.ShootStartedOrder = updateData.NextInputOrder();
+            }
+            else if (ctx.canceled)
+            {
+                updateData.ShootHeld = false;
+                updateData.ShootReleased = true;
+            }
+        });
     }
 
     public void HandleMeleeInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.MeleeAttackStarted |= ctx.started);
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData =>
+        {
+            if (ctx.started) updateData.MeleeOrder = updateData.NextInputOrder();
+        });
     }
 
     public void HandleReloadInput(InputAction.CallbackContext ctx)
     {
-        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData => updateData.ReloadStarted |= ctx.started);
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData =>
+        {
+            if (ctx.started) updateData.ReloadOrder = updateData.NextInputOrder();
+        });
+    }
+
+    public void HandleEquipPistolInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData =>
+        {
+            if (ctx.started) updateData.RequestEquip<Pistol>();
+        });
+    }
+
+    public void HandleEquipRifleInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData =>
+        {
+            if (ctx.started) updateData.RequestEquip<Rifle>();
+        });
+    }
+
+    public void HandleEquipGrenadeLauncherInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData =>
+        {
+            if (ctx.started) updateData.RequestEquip<GrenadeLauncher>();
+        });
+    }
+
+    public void HandleEquipShotgunInput(InputAction.CallbackContext ctx)
+    {
+        SetDataValue<FirstPersonPlayerCharacterUpdateData>(updateData =>
+        {
+            if (ctx.started) updateData.RequestEquip<Shotgun>();
+        });
     }
     #endregion Handle PlayerInput Events
 }
