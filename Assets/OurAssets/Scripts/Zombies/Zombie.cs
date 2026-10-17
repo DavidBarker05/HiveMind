@@ -1,42 +1,66 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
-
-[RequireComponent(typeof(CapsuleCollider), typeof(NavMeshAgent), typeof(AnimatedMesh))]
+[
+    RequireComponent(
+        typeof(CapsuleCollider),
+        typeof(Rigidbody),
+        typeof(AnimatedMesh)
+    ),
+    RequireComponent(
+        typeof(HealthComponent)
+    )
+]
 public class Zombie : MonoBehaviour
 {
     [SerializeField, Min(0.01f)]
-    float m_TargetPositionUpdateFrequency = 5f;
+    float m_Speed = 5f;
+
+    [Header("Climbing")]
+    [SerializeField] LayerMask m_ClimbableMask;
+    [SerializeField, Min(0f)] float m_WallCheckDistance = 0.3f;
+    [SerializeField, Min(0.01f)] float m_ClimbSpeed = 3f;
 
     FirstPersonPlayerCharacter m_Player;
 
-    NavMeshAgent m_Agent;
+    Rigidbody m_RB;
+    CapsuleCollider m_Capsule;
 
-    void OnEnable() => GetComponent<CapsuleCollider>().isTrigger = true;
-
-    void Awake() => m_Agent = GetComponent<NavMeshAgent>();
-
-    void Start()
+    void Awake()
     {
-        m_Player = FindAnyObjectByType<FirstPersonPlayerCharacter>();
-        GetComponent<AnimatedMesh>().Play("run");
-        StartCoroutine(TargetUpdate());
+        m_RB = GetComponent<Rigidbody>();
+        m_Capsule = GetComponent<CapsuleCollider>();
     }
 
-    void OnTriggerEnter(Collider other)
+    public void Init(FirstPersonPlayerCharacter player)
     {
-        if (other.gameObject.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        m_Player = player;
+        GetComponent<AnimatedMesh>().Play("run");
+        GetComponent<HealthComponent>().OnDeath.AddListener(() => EnemyManager.Instance.ZombieDied(this));
+    }
+
+    // Thank you vedinad for telling me to use rigid body
+    public void ZombieFixedUpdate()
+    {
+        Vector3 toPlayer = m_Player.transform.position - m_RB.position;
+        toPlayer.y = 0f;
+        if (toPlayer.sqrMagnitude < 0.0001f) return;
+        Vector3 dir = toPlayer.normalized;
+        m_RB.MoveRotation(Quaternion.LookRotation(dir));
+        Vector3 origin = m_RB.position + Vector3.up * 0.1f;
+        bool wallAhead = Physics.Raycast(origin, dir, m_Capsule.radius + m_WallCheckDistance, m_ClimbableMask);
+        m_RB.useGravity = !wallAhead;
+        if (wallAhead)
+        {
+            m_RB.linearVelocity = Vector3.zero;
+            m_RB.MovePosition(m_RB.position + Vector3.up * (m_ClimbSpeed * Time.fixedDeltaTime));
+        }
+        else m_RB.MovePosition(m_RB.position + dir * (m_Speed * Time.fixedDeltaTime));
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             // TODO: Damage Player
-        }
-    }
-
-    IEnumerator TargetUpdate()
-    {
-        while (m_Player)
-        {
-            //m_Agent.SetDestination(m_Player.transform.position);
-            yield return new WaitForSeconds(1f / m_TargetPositionUpdateFrequency);
         }
     }
 }
