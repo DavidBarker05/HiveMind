@@ -28,9 +28,8 @@ public class WeaponHandlerComponent : MonoBehaviour
     public void Init()
     {
         AddGun(m_PistolPrefab);
-        AddGun(m_RiflePrefab);
         Equip<Pistol>();
-        AddMeleeWeapon(m_BatPrefab);
+        // AddMeleeWeapon(m_BatPrefab);
     }
 
     public void UpdateHandler(float deltaTime)
