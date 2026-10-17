@@ -113,6 +113,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
         FirstPersonPlayerCharacterUpdateData updateData = Sys.AssertType<FirstPersonPlayerCharacterUpdateData>(playerCharacterUpdateData, nameof(playerCharacterUpdateData));
         HandleMovement(ref updateData);
+        m_WeaponComponent.UpdateHandler(updateData.DeltaTime);
         HandleWeapons(ref updateData);
     }
 
@@ -256,6 +257,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
                 m_ArmsAnimator.Play(attackAnim, -1, 0f);
         }
         m_bAttackPressedLastFrame = updateData.ShootPressedThisFrame && !updateData.ShootReleasedThisFrame;
+        if (m_WeaponComponent.CurrentGun is Rifle rifle && updateData.ShootReleasedThisFrame)
+            rifle.StopAttacking();
     }
 
     bool HandleShoot(bool bAttackPressedThisFrame)
@@ -281,6 +284,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             m_ArmsAnimator.Play(reloadAnim, -1, 0f);
             m_bReloading = true;
             StartCoroutine(CheckForPistolReloadEnd());
+            if (m_WeaponComponent.CurrentGun is Rifle rifle)
+                rifle.StopAttacking();
         }
         updateData.ReloadStarted = false;
     }

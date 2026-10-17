@@ -12,7 +12,11 @@ public abstract class Weapon : MonoBehaviour
     [field: SerializeField, Min(1)]
     public int Damage { get; private set; }
 
-    protected bool m_bCanAttack = true;
+    protected float m_AttackCooldownRemaining;
+
+    public bool CanAttack => m_AttackCooldownRemaining <= 0f;
 
     public abstract bool Attack(Transform origin);
+
+    public abstract void UpdateWeapon(float deltaTime);
 }
