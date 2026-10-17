@@ -46,6 +46,9 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         Pistol => "PistolShoot",
         Rifle => "RifleShoot",
+        GrenadeLauncher => "GrenadeLauncherShoot",
+        Katana => "KatanaSlice",
+        Bat => "BatBash",
         _ => string.Empty
     };
 
@@ -53,6 +56,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         Pistol => "PistolReload",
         Rifle => "RifleReload",
+        GrenadeLauncher => "GrenadeLauncherReload",
         _ => string.Empty
     };
 
@@ -60,6 +64,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         Pistol => self.CheckForPistolReloadEnd(),
         Rifle => self.CheckForRifleReloadEnd(),
+        GrenadeLauncher => self.CheckForGrenadeLauncherReloadEnd(),
         _ => null
     };
 
@@ -355,6 +360,21 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         }
         m_bReloading = false;
         if (m_WeaponComponent.CurrentGun is Rifle rifle) rifle.Reload();
+    }
+
+    IEnumerator CheckForGrenadeLauncherReloadEnd()
+    {
+        AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
+        while (m_WeaponComponent.CurrentGun
+            && m_bReloading
+            && m_WeaponComponent.CurrentGun is GrenadeLauncher
+            && stateInfo.IsName("GrenadeLauncherReload") && stateInfo.normalizedTime < 1.0f)
+        {
+            stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
+            yield return null;
+        }
+        m_bReloading = false;
+        if (m_WeaponComponent.CurrentGun is GrenadeLauncher grenadeLauncher) grenadeLauncher.Reload();
     }
     #endregion
 }
