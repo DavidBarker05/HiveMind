@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HealthComponent : MonoBehaviour
 {
@@ -12,10 +13,13 @@ public class HealthComponent : MonoBehaviour
 
     void Start() => CurrentHealth = MaxHealth;
 
+    public UnityEvent OnDeath;
+
     public void TakeDamage(int damage)
     {
         if (damage <= 0) return;
         CurrentHealth = Mathf.Max(CurrentHealth - damage, 0);
+        if (CurrentHealth == 0) OnDeath?.Invoke();
     }
 
     public void ReceiveHealth(int health)

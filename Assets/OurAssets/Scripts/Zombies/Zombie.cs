@@ -1,42 +1,46 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
-
-[RequireComponent(typeof(CapsuleCollider), typeof(NavMeshAgent), typeof(AnimatedMesh))]
+[
+    RequireComponent(
+        typeof(CapsuleCollider),
+        typeof(Rigidbody),
+        typeof(AnimatedMesh)
+    ),
+    RequireComponent(
+        typeof(HealthComponent)
+    )
+]
 public class Zombie : MonoBehaviour
 {
     [SerializeField, Min(0.01f)]
-    float m_TargetPositionUpdateFrequency = 5f;
+    float m_Speed = 5f;
 
     FirstPersonPlayerCharacter m_Player;
 
-    NavMeshAgent m_Agent;
+    Rigidbody m_RB;
 
-    void OnEnable() => GetComponent<CapsuleCollider>().isTrigger = true;
+    void Awake() => m_RB = GetComponent<Rigidbody>();
 
-    void Awake() => m_Agent = GetComponent<NavMeshAgent>();
-
-    void Start()
+    public void Init(FirstPersonPlayerCharacter player)
     {
-        m_Player = FindAnyObjectByType<FirstPersonPlayerCharacter>();
+        m_Player = player;
         GetComponent<AnimatedMesh>().Play("run");
-        StartCoroutine(TargetUpdate());
+        GetComponent<HealthComponent>().OnDeath.AddListener(() => EnemyManager.Instance.ZombieDied(this));
     }
 
-    void OnTriggerEnter(Collider other)
+    // Thank you vedinad for telling me to use rigid body
+    public void ZombieFixedUpdate()
     {
-        if (other.gameObject.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Player"))
+        Vector3 dir = m_Player.transform.position - transform.position;
+        dir.y = 0f;
+        Vector3 nextPos = transform.position + dir * (m_Speed * Time.fixedDeltaTime);
+        m_RB.MovePosition(nextPos);
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             // TODO: Damage Player
-        }
-    }
-
-    IEnumerator TargetUpdate()
-    {
-        while (m_Player)
-        {
-            //m_Agent.SetDestination(m_Player.transform.position);
-            yield return new WaitForSeconds(1f / m_TargetPositionUpdateFrequency);
         }
     }
 }
