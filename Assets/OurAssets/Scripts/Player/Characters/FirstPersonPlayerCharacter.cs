@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.XR;
 using Util.SystemUtils;
 
 public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
@@ -55,6 +54,13 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         Pistol => "PistolReload",
         Rifle => "RifleReload",
         _ => string.Empty
+    };
+
+    static IEnumerator ReloadCheckEnd(FirstPersonPlayerCharacter self, Gun gun) => gun switch
+    {
+        Pistol => self.CheckForPistolReloadEnd(),
+        Rifle => self.CheckForRifleReloadEnd(),
+        _ => null
     };
 
     [SerializeField]
@@ -279,11 +285,12 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         }
         if (!updateData.ReloadStarted) return;
         string reloadAnim = ReloadAnimation(m_WeaponComponent.CurrentGun);
-        if (!string.IsNullOrEmpty(reloadAnim))
+        IEnumerator reloadEndCheck = ReloadCheckEnd(this, m_WeaponComponent.CurrentGun);
+        if (!string.IsNullOrEmpty(reloadAnim) && reloadEndCheck != null)
         {
             m_ArmsAnimator.Play(reloadAnim, -1, 0f);
             m_bReloading = true;
-            StartCoroutine(CheckForPistolReloadEnd());
+            StartCoroutine(reloadEndCheck);
             if (m_WeaponComponent.CurrentGun is Rifle rifle)
                 rifle.StopAttacking();
         }
@@ -320,7 +327,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     IEnumerator CheckForPistolReloadEnd()
     {
         AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
-        while (m_WeaponComponent.CurrentMeleeWeapon
+        while (m_WeaponComponent.CurrentGun
             && m_bReloading
             && m_WeaponComponent.CurrentGun is Pistol
             && stateInfo.IsName("PistolReload") && stateInfo.normalizedTime < 1.0f)
@@ -329,23 +336,22 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             yield return null;
         }
         m_bReloading = false;
+        if (m_WeaponComponent.CurrentGun is Pistol pistol) pistol.Reload();
     }
-    public void HandleAnimationEvent(string eventName)
-    {
-        Debug.Log("Helppppp");
-        switch (eventName)
-        {
-            case "PistolReloadEnded":
 
-                if (m_bReloading && m_WeaponComponent.CurrentGun is Pistol pistol)
-                {
-                    pistol.Reload();
-                    m_bReloading = false;
-                }
-                break;
-            default:
-                throw new System.NotImplementedException("");
+    IEnumerator CheckForRifleReloadEnd()
+    {
+        AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
+        while (m_WeaponComponent.CurrentGun
+            && m_bReloading
+            && m_WeaponComponent.CurrentGun is Rifle
+            && stateInfo.IsName("RifleReload") && stateInfo.normalizedTime < 1.0f)
+        {
+            stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
+            yield return null;
         }
+        m_bReloading = false;
+        if (m_WeaponComponent.CurrentGun is Rifle rifle) rifle.Reload();
     }
     #endregion
 }
