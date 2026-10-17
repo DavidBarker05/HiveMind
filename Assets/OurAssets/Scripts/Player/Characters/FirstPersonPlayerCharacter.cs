@@ -151,7 +151,10 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         UpdateHorizontalVelocity(updateData.MovementInput);
         JumpChecks(updateData.JumpPressedThisFrame);
         UpdateVerticalVelocity(updateData.DeltaTime);
-        updateData.IsSprinting = m_bIsSprinting;
+        updateData.IsSprinting =
+            m_bIsSprinting // Pressing sprint
+            && (m_bIsGrounded || m_CharacterSettings.CanSprintInAir) // On ground or allowed to sprint in air
+            && (updateData.MovementInput.x > s_Epsilon || updateData.MovementInput.y > s_Epsilon); // Pressing movement keys
         m_CC.Move(m_Velocity * updateData.DeltaTime);
     }
 
