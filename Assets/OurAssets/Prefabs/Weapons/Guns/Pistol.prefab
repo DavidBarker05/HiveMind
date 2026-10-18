@@ -49,7 +49,7 @@ MonoBehaviour:
   <IsRapidFire>k__BackingField: 0
   <HittableLayers>k__BackingField:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 129
   <TimeBetweenAttacks>k__BackingField: 0.5
   m_BaseDamage: 0
   m_DamagePercentIncreasePerLevel: 0.1
@@ -223,6 +223,10 @@ PrefabInstance:
       value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 198234346748616026, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198234346748616026, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 0.2
       objectReference: {fileID: 0}
@@ -237,6 +241,10 @@ PrefabInstance:
     - target: {fileID: 198515452120210940, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
       propertyPath: lengthInSec
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198515452120210940, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+      propertyPath: playOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 198515452120210940, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
       propertyPath: InitialModule.rotation3D
