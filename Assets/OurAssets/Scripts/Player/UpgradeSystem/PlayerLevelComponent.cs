@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class PlayerLevelComponent : MonoBehaviour
 {
     [SerializeField, Min(1)]
-    int m_BaseXP = 5;
+    int m_BaseXP = 100;
     [SerializeField, Min(1f)]
     float m_GrowthPerLevel = 8f;
     [SerializeField, Min(1f)]
@@ -18,8 +18,6 @@ public class PlayerLevelComponent : MonoBehaviour
     public UnityEvent OnLevelUp;
     public UnityEvent OnXPChanged;
 
-    void Start() => OnLevelUp.AddListener(() => UpgradeSystem.Instance.LevelUp());
-
     int XPForLevel(int level) => m_BaseXP + Mathf.RoundToInt(m_GrowthPerLevel * Mathf.Pow(level - 1, m_GrowthExponent));
 
     public void AddXP(int amount)
@@ -32,6 +30,10 @@ public class PlayerLevelComponent : MonoBehaviour
             ++Level;
         }
         OnXPChanged?.Invoke();
-        if (bLevelUp) OnLevelUp?.Invoke();
+        if (bLevelUp)
+        {
+            OnLevelUp?.Invoke();
+            UpgradeSystem.Instance.LevelUp();
+        }
     }
 }

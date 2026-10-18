@@ -3,13 +3,19 @@ using UnityEngine.Events;
 
 public class HealthComponent : MonoBehaviour
 {
-    [field: SerializeField, Min(1)]
-    public int MaxHealth { get; private set; } = 100;
-
-    public int CurrentHealth { get; private set; }
+    [SerializeField]
+    float m_BaseMaxHealth = 100f;
+    public float MaxHealth { get; private set; }
+    public float CurrentHealth { get; private set; }
 
     public bool IsDead => CurrentHealth == 0;
     public bool IsAlive => CurrentHealth > 0;
+
+    public void InitHealth(float multiplier = 1f)
+    {
+        MaxHealth = m_BaseMaxHealth * multiplier;
+        CurrentHealth = MaxHealth;
+    }
 
     void Start() => CurrentHealth = MaxHealth;
 

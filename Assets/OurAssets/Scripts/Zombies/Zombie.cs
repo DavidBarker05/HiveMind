@@ -13,6 +13,10 @@ public class Zombie : MonoBehaviour
 {
     [SerializeField, Min(0.01f)]
     float m_Speed = 5f;
+    [SerializeField]
+    float m_BaseDamage = 10f;
+
+    float m_Damage;
 
     [Header("Climbing")]
     [SerializeField] LayerMask m_ClimbableMask;
@@ -30,11 +34,17 @@ public class Zombie : MonoBehaviour
         m_Capsule = GetComponent<CapsuleCollider>();
     }
 
-    public void Init(FirstPersonPlayerCharacter player)
+    public void Init(FirstPersonPlayerCharacter player, float healthMult, float damageMult)
     {
         m_Player = player;
+        m_Damage = m_BaseDamage * damageMult;
+        GetComponent<HealthComponent>().InitHealth(healthMult);
         GetComponent<AnimatedMesh>().Play("run");
-        GetComponent<HealthComponent>().OnDeath.AddListener(() => EnemyManager.Instance.ZombieDied(this));
+        GetComponent<HealthComponent>().OnDeath.AddListener(() =>
+        {
+            EnemyManager.Instance.ZombieDied(this);
+            Destroy(gameObject);
+        });
     }
 
     // Thank you vedinad for telling me to use rigid body
@@ -56,9 +66,10 @@ public class Zombie : MonoBehaviour
         else m_RB.MovePosition(m_RB.position + dir * (m_Speed * Time.fixedDeltaTime));
     }
 
-    void OnCollisionEnter(Collision collision)
+    // Has to be OnTriggerEnter for CharacterController so add an additional CapsuleCollider that is a trigger
+    void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Player") || collision.gameObject.layer == LayerMask.NameToLayer("Player"))
+        if (other.gameObject.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             // TODO: Damage Player
         }
