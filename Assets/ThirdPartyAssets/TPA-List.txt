@@ -22,3 +22,7 @@ By LlamAcademy
 <i>Retro 3D Shader Pack for Unity</i>
 By LEAKYFINGERS
 <color=#0055AA><u><link="https://leakyfingers.itch.io/retro-3d-shader-pack-for-unity">https://leakyfingers.itch.io/retro-3d-shader-pack-for-unity</link></u></color>
+
+<i>Particle Pack | Starter Assets</i>
+By Unity Technologies
+<color=#0055AA><u><link="https://assetstore.unity.com/packages/vfx/particles/particle-pack-starter-assets-127325">https://assetstore.unity.com/packages/vfx/particles/particle-pack-starter-assets-127325</link></u></color>

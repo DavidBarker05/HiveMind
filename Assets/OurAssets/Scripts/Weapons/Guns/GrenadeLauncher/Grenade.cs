@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Util.UnityUtils;
 
@@ -8,6 +9,8 @@ public class Grenade : MonoBehaviour
     float m_ExplosionTime = 4.5f; // Grenades irl explode within 4-5 seconds iirc
     [SerializeField, Min(0.1f)]
     float m_ExplosionRadius = 5f;
+    [SerializeField]
+    ParticleSystem m_Explosion;
 
     bool m_bPrimed = false;
     int m_Damage;
@@ -43,6 +46,13 @@ public class Grenade : MonoBehaviour
                 if (healthComponent) healthComponent.TakeDamage(m_Damage);
             }
         }
+        m_Explosion.Play();
+        StartCoroutine(WaitForExplosionToEnd());
+    }
+
+    IEnumerator WaitForExplosionToEnd()
+    {
+        yield return new WaitWhile(() => m_Explosion.isPlaying);
         Destroy(gameObject);
     }
 }
