@@ -385,6 +385,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         MeleeWeapon melee = m_WeaponComponent.CurrentMeleeWeapon;
         if (!melee || !m_WeaponComponent.MeleeAttack(CameraTarget)) return false;
+        melee.gameObject.SetActive(true);
+        m_WeaponComponent.CurrentGun.gameObject.SetActive(false);
         CancelReload(); // Melee cancels reload as to not lock player into defenceless state
         if (m_WeaponComponent.CurrentGun is Rifle rifle) rifle.StopAttacking();
         string attackAnim = AttackAnimation(melee);
@@ -464,6 +466,11 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         }
         m_bAttackLocked = false;
         if (bFinished && !m_bReloading) PlayIdle();
+        if (m_WeaponComponent.CurrentMeleeWeapon.gameObject.activeSelf)
+        {
+            m_WeaponComponent.CurrentGun.gameObject.SetActive(true);
+            m_WeaponComponent.CurrentMeleeWeapon.gameObject.SetActive(false);
+        }
     }
     #endregion
 }

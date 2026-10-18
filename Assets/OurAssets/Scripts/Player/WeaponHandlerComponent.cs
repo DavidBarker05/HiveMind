@@ -29,7 +29,7 @@ public class WeaponHandlerComponent : MonoBehaviour
     {
         AddGun(m_PistolPrefab);
         Equip<Pistol>();
-        // AddMeleeWeapon(m_BatPrefab);
+        AddMeleeWeapon(m_BatPrefab);
         UpgradeSystem.Instance.OnUpgradePurchased += OnUpgradePurchased;
     }
 

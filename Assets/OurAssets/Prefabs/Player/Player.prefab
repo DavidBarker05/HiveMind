@@ -542,8 +542,8 @@ MonoBehaviour:
   m_PistolPrefab: {fileID: 5616132268291718340, guid: 1be89975b76483c4ba15de78caf20b09, type: 3}
   m_RiflePrefab: {fileID: 190411219736871896, guid: 7563bcf242598764782031f0c8120d0d, type: 3}
   m_GrenadeLauncherPrefab: {fileID: 5437266500713563046, guid: c3c9f57d29130f54d8434e6f43904057, type: 3}
-  m_ShotgunPrefab: {fileID: 0}
-  m_BatPrefab: {fileID: 0}
+  m_ShotgunPrefab: {fileID: 673813528221344672, guid: b54d3312a94b12e4c9de3b0b7635b8b4, type: 3}
+  m_BatPrefab: {fileID: 32615463614392932, guid: a73cbb5b17504d14bb8ba53f7e2c5886, type: 3}
   m_KatanaPrefab: {fileID: 6092492026217653128, guid: f789143314b98fc4b8fb18a8f25fba84, type: 3}
 --- !u!114 &2732225925480164097
 MonoBehaviour:
@@ -580,6 +580,10 @@ MonoBehaviour:
   m_BaseXP: 100
   m_GrowthPerLevel: 8
   m_GrowthExponent: 1.15
+  m_HUD: {fileID: 0}
+  m_LevelUpScreen: {fileID: 0}
+  m_FirstPersonCharacter: {fileID: 0}
+  m_MenuCharacter: {fileID: 0}
   OnLevelUp:
     m_PersistentCalls:
       m_Calls: []
