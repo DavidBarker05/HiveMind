@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b58f706b6b4494ca8c15e25876f0a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
-  m_BaseMaxHealth: 100
+  m_BaseMaxHealth: 50
   m_HealthPerUpgrade: 20
   OnDeath:
     m_PersistentCalls:
@@ -236,10 +236,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Zombie
   m_Speed: 5
   m_BaseDamage: 10
-  m_TimeBetweenAttacks: 0.5
+  m_TimeBetweenAttacks: 1
   m_Debug: 0
   m_ClimbableMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 129
   m_WallCheckDistance: 0.3
   m_ClimbSpeed: 3

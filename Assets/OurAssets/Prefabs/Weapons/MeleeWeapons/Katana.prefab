@@ -48,11 +48,12 @@ MonoBehaviour:
   <IsRapidFire>k__BackingField: 0
   <HittableLayers>k__BackingField:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   <TimeBetweenAttacks>k__BackingField: 1
-  <Damage>k__BackingField: 1
+  m_BaseDamage: 15
+  m_DamagePercentIncreasePerLevel: 0.1
   <AttackRange>k__BackingField: 2
-  <KnockbackForce>k__BackingField: 10
+  <KnockbackForce>k__BackingField: 5
   m_AttackAngle: 60
 --- !u!1001 &2657361092024511093
 PrefabInstance:

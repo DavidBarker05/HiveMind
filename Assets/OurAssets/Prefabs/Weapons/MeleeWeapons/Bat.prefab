@@ -50,10 +50,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   <TimeBetweenAttacks>k__BackingField: 0.7
-  m_BaseDamage: 1
+  m_BaseDamage: 12
   m_DamagePercentIncreasePerLevel: 0.1
   <AttackRange>k__BackingField: 2
-  <KnockbackForce>k__BackingField: 20
+  <KnockbackForce>k__BackingField: 10
   m_SphereCastRadius: 0.5
 --- !u!1001 &7793415838351812800
 PrefabInstance:

@@ -51,7 +51,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 129
   <TimeBetweenAttacks>k__BackingField: 0.1
-  m_BaseDamage: 0
+  m_BaseDamage: 15
   m_DamagePercentIncreasePerLevel: 0.1
   <Recoil>k__BackingField: 0.25
   m_BaseMaxReserveMagazines: 6
@@ -62,7 +62,7 @@ MonoBehaviour:
   m_SpreadPerShot: 0.4
   m_MaxSpread: 1.5
   m_RecoveryRate: 4
-  m_MuzzleFlash: {fileID: 0}
+  m_MuzzleFlash: {fileID: 9028108978030369189}
 --- !u!1001 &4216214444287699009
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -266,6 +266,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+--- !u!198 &9028108978030369189 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198515452120210940, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
+  m_PrefabInstance: {fileID: 9190454343068730457}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9188551362416863309 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4300533007854612, guid: ad2ab49d0a2a17148bd51c93d977bdbc, type: 3}
