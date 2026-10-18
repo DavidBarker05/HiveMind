@@ -243,7 +243,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1748119989260981471}
         m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: HandleEquipGrenadeLauncherInput
+        m_MethodName: HandleEquipShotgunInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -259,7 +259,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1748119989260981471}
         m_TargetAssemblyTypeName: Player, Assembly-CSharp
-        m_MethodName: HandleEquipShotgunInput
+        m_MethodName: HandleEquipGrenadeLauncherInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

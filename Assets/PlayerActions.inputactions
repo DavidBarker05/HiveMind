@@ -97,7 +97,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "EquipGrenadeLauncher",
+                    "name": "EquipShotgun",
                     "type": "Button",
                     "id": "45b69208-a46d-4a88-9cdb-b28647d59d1f",
                     "expectedControlType": "",
@@ -106,7 +106,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "EquipShotgun",
+                    "name": "EquipGrenadeLauncher",
                     "type": "Button",
                     "id": "574a65bd-d077-4738-9861-184e9b6daa8d",
                     "expectedControlType": "",
@@ -277,7 +277,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "EquipGrenadeLauncher",
+                    "action": "EquipShotgun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -288,7 +288,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "EquipShotgun",
+                    "action": "EquipGrenadeLauncher",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
