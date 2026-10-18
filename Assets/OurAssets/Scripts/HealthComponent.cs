@@ -5,6 +5,10 @@ public class HealthComponent : MonoBehaviour
 {
     [SerializeField]
     float m_BaseMaxHealth = 100f;
+    [Header("Player")]
+    [SerializeField, Min(1)]
+    int m_HealthPerUpgrade = 20;
+
     public float MaxHealth { get; private set; }
     public float CurrentHealth { get; private set; }
 
@@ -32,5 +36,12 @@ public class HealthComponent : MonoBehaviour
     {
         if (health <= 0) return;
         CurrentHealth = Mathf.Min(CurrentHealth + health, MaxHealth);
+    }
+
+    public void OnUpgradePurchased(UpgradeType upgradeType)
+    {
+        if (upgradeType != UpgradeType.Health) return;
+        MaxHealth += m_HealthPerUpgrade;
+        CurrentHealth += m_HealthPerUpgrade;
     }
 }

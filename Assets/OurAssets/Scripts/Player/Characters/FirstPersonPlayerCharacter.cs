@@ -156,6 +156,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         m_Camera = initData.Camera;
         m_WeaponComponent.Init();
         m_HealthComponent.InitHealth();
+        UpgradeSystem.Instance.OnUpgradePurchased += m_HealthComponent.OnUpgradePurchased;
         HasBeenInitialised = true;
     }
 
