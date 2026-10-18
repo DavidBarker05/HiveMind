@@ -142,11 +142,13 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     PausePlayerCharacter m_PausePlayerCharacter;
 
-    void Awake()
+    void Awake() => CacheComponents();
+
+    void CacheComponents()
     {
-        m_CC = GetComponent<CharacterController>();
-        m_WeaponComponent = GetComponent<WeaponHandlerComponent>();
-        m_HealthComponent = GetComponent<HealthComponent>();
+        if (!m_CC) m_CC = GetComponent<CharacterController>();
+        if (!m_WeaponComponent) m_WeaponComponent = GetComponent<WeaponHandlerComponent>();
+        if (!m_HealthComponent) m_HealthComponent = GetComponent<HealthComponent>();
     }
 
     void OnDestroy()
@@ -157,6 +159,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
+        CacheComponents();
         FirstPersonPlayerCharacterInitData initData = Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
         m_CharacterSettings = initData.CharacterSettings;
         m_PausePlayerCharacter = initData.PausePlayerCharacter;
@@ -424,7 +427,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     void PlayIdle()
     {
         Gun gun = m_WeaponComponent.CurrentGun;
-        if (!gun) return;
+        if (!gun || !m_ArmsAnimator || !m_ArmsAnimator.gameObject.activeInHierarchy) return;
         string idleAnim = IdleAnimation(gun);
         if (!string.IsNullOrEmpty(idleAnim)) m_ArmsAnimator.Play(idleAnim, -1, 0f);
     }
