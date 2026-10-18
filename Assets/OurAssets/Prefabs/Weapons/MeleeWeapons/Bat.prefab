@@ -52,9 +52,9 @@ MonoBehaviour:
   <TimeBetweenAttacks>k__BackingField: 0.7
   m_BaseDamage: 12
   m_DamagePercentIncreasePerLevel: 0.1
-  <AttackRange>k__BackingField: 2
+  <AttackRange>k__BackingField: 3
   <KnockbackForce>k__BackingField: 10
-  m_SphereCastRadius: 0.5
+  m_SphereCastRadius: 1
 --- !u!1001 &7793415838351812800
 PrefabInstance:
   m_ObjectHideFlags: 0

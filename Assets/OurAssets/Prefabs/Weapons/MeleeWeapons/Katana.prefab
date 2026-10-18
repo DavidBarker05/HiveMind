@@ -52,7 +52,7 @@ MonoBehaviour:
   <TimeBetweenAttacks>k__BackingField: 1
   m_BaseDamage: 15
   m_DamagePercentIncreasePerLevel: 0.1
-  <AttackRange>k__BackingField: 2
+  <AttackRange>k__BackingField: 4
   <KnockbackForce>k__BackingField: 5
   m_AttackAngle: 60
 --- !u!1001 &2657361092024511093
