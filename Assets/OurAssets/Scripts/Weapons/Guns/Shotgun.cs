@@ -10,6 +10,8 @@ public class Shotgun : Gun
     int m_NumBullets = 7;
     [SerializeField, Min(0f)]
     float m_BulletSpread = 5f;
+    [SerializeField]
+    ParticleSystem m_MuzzleFlash;
 
     Vector3 GetSpreadDirection(Transform origin, float spreadDegrees)
     {
@@ -41,6 +43,7 @@ public class Shotgun : Gun
                 if (health) health.TakeDamage(Damage);
             }
         }
+        m_MuzzleFlash.Play();
         return true;
     }
 

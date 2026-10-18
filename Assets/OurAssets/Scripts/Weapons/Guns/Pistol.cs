@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using Util.UnityUtils;
 
@@ -7,6 +6,8 @@ public class Pistol : Gun
     [Header("Pistol")]
     [SerializeField, Min(0.01f)]
     float m_AttackRange;
+    [SerializeField]
+    ParticleSystem m_MuzzleFlash;
 
     bool Shoot(Transform origin, out RaycastHit hitInfo) => Physics.Raycast(
         origin: origin.position,
@@ -27,6 +28,7 @@ public class Pistol : Gun
             HealthComponent healthComponent = hitInfo.GetComponent<HealthComponent>();
             if (healthComponent) healthComponent.TakeDamage(Damage);
         }
+        m_MuzzleFlash.Play();
         return true;
     }
 
