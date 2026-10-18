@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 6757390503603905467}
   - component: {fileID: 3855793730135446629}
   - component: {fileID: 2220952153898218797}
-  - component: {fileID: 7329472797372613035}
   - component: {fileID: 292558641744807251}
   - component: {fileID: 6746374057446475829}
+  - component: {fileID: 6521290201584988133}
+  - component: {fileID: 7329472797372613035}
   m_Layer: 7
   m_Name: Zombie
   m_TagString: Untagged
@@ -134,19 +135,6 @@ CapsuleCollider:
   m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.85, z: 0}
---- !u!114 &7329472797372613035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7672801158948367119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a01780cbe021dae4f9aa2770f6af497c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Zombie
-  m_Speed: 5
 --- !u!54 &292558641744807251
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -186,7 +174,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b58f706b6b4494ca8c15e25876f0a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
-  <MaxHealth>k__BackingField: 100
+  m_BaseMaxHealth: 100
+  m_HealthPerUpgrade: 20
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
+  OnDamageTaken:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6521290201584988133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7672801158948367119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bdb35c5b6ab8214aba5499cc8b79910, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HitFlashComponent
+  m_Renderer: {fileID: 6757390503603905467}
+  m_EmissionColorProperty: _EmissionColor
+  m_FlashColor: {r: 1.4142135, g: 0, b: 0, a: 0}
+  m_ColorFlashDuration: 0.1
+--- !u!114 &7329472797372613035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7672801158948367119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01780cbe021dae4f9aa2770f6af497c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Zombie
+  m_Speed: 5
+  m_BaseDamage: 10
+  m_ClimbableMask:
+    serializedVersion: 2
+    m_Bits: 0
+  m_WallCheckDistance: 0.3
+  m_ClimbSpeed: 3

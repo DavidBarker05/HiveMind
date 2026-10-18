@@ -6,7 +6,8 @@ using UnityEngine;
         typeof(AnimatedMesh)
     ),
     RequireComponent(
-        typeof(HealthComponent)
+        typeof(HealthComponent),
+        typeof(HitFlashComponent)
     )
 ]
 public class Zombie : MonoBehaviour
@@ -27,11 +28,13 @@ public class Zombie : MonoBehaviour
 
     Rigidbody m_RB;
     CapsuleCollider m_Capsule;
+    HitFlashComponent m_HitFlash;
 
     void Awake()
     {
         m_RB = GetComponent<Rigidbody>();
         m_Capsule = GetComponent<CapsuleCollider>();
+        m_HitFlash = GetComponent<HitFlashComponent>();
     }
 
     public void Init(FirstPersonPlayerCharacter player, float healthMult, float damageMult)
@@ -40,11 +43,13 @@ public class Zombie : MonoBehaviour
         m_Damage = m_BaseDamage * damageMult;
         GetComponent<HealthComponent>().InitHealth(healthMult);
         GetComponent<AnimatedMesh>().Play("run");
-        GetComponent<HealthComponent>().OnDeath.AddListener(() =>
+        HealthComponent healthComponent = GetComponent<HealthComponent>();
+        healthComponent.OnDeath.AddListener(() =>
         {
             EnemyManager.Instance.ZombieDied(this);
             Destroy(gameObject);
         });
+        healthComponent.OnDamageTaken.AddListener(() => m_HitFlash.Flash());
     }
 
     // Thank you vedinad for telling me to use rigid body
