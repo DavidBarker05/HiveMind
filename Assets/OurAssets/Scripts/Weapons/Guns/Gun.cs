@@ -5,12 +5,14 @@ public abstract class Gun : Weapon
     [field: Header("Gun")]
     [field: SerializeField, Min(0.01f)]
     public float Recoil { get; private set; }
-    [field: SerializeField, Min(1)]
-    public int MaxReserveAmmo { get; private set; }
+    [SerializeField, Min(1)]
+    int m_BaseMaxReserveMagazines;
     [field: SerializeField, Min(1)]
     public int MagazineSize { get; private set; }
     [field: SerializeField, Min(1)]
     public int StartingMagazines { get; private set; } = 3;
+
+    public int MaxReserveMagazines => m_BaseMaxReserveMagazines + UpgradeSystem.Instance.GetUpgradeLevel(UpgradeType.AmmoCapacity);
 
     public int MagazineAmmo { get; protected set; }
     public int ReserveAmmo { get; protected set; }
@@ -22,10 +24,16 @@ public abstract class Gun : Weapon
     protected virtual void Start()
     {
         MagazineAmmo = MagazineSize;
-        ReserveAmmo = (StartingMagazines - 1) * MagazineSize;
+        AddAmmo((StartingMagazines - 1) * MagazineSize);
     }
 
-    public void PickupMagazine() => ReserveAmmo = Mathf.Min(ReserveAmmo + MagazineSize, MaxReserveAmmo);
+    public void AddAmmo(int ammo)
+    {
+        if (ammo <= 0) return;
+        ReserveAmmo = Mathf.Min(ReserveAmmo + ammo, MaxReserveMagazines * MagazineSize);
+    }
+
+    public void PickupMagazine() => AddAmmo(MagazineSize);
 
     public void Reload() => MagazineAmmo += Mathf.Min(MagazineSize - MagazineAmmo, ReserveAmmo);
 }

@@ -51,8 +51,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   <TimeBetweenAttacks>k__BackingField: 0.1
-  <Damage>k__BackingField: 1
+  m_BaseDamage: 0
+  m_DamagePercentIncreasePerLevel: 0.1
   <Recoil>k__BackingField: 0.25
+  m_BaseMaxReserveMagazines: 6
   <MaxReserveAmmo>k__BackingField: 180
   <MagazineSize>k__BackingField: 30
   <StartingMagazines>k__BackingField: 3
