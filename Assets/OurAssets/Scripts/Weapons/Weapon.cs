@@ -9,8 +9,16 @@ public abstract class Weapon : MonoBehaviour
     public LayerMask HittableLayers { get; private set; }
     [field: SerializeField, Min(0.01f)]
     public float TimeBetweenAttacks { get; private set; }
-    [field: SerializeField, Min(1)]
-    public int Damage { get; private set; }
+    [SerializeField, Min(1)]
+    int m_BaseDamage;
+    [SerializeField, Min(0.001f)]
+    float m_DamagePercentIncreasePerLevel = 0.1f; // 10%
+
+    public int Damage =>
+        Mathf.RoundToInt(
+            m_BaseDamage
+            * (1f + m_DamagePercentIncreasePerLevel * UpgradeSystem.Instance.GetUpgradeLevel(UpgradeType.Damage))
+        );
 
     protected float m_AttackCooldownRemaining;
 
