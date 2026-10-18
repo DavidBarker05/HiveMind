@@ -37,5 +37,10 @@ public abstract class Gun : Weapon
 
     public void PickupMagazine() => AddAmmo(MagazineSize);
 
-    public void Reload() => MagazineAmmo += Mathf.Min(MagazineSize - MagazineAmmo, ReserveAmmo);
+    public void Reload()
+    {
+        int ammoToLoad = Mathf.Min(MagazineSize - MagazineAmmo, ReserveAmmo);
+        MagazineAmmo += ammoToLoad;
+        ReserveAmmo -= ammoToLoad;
+    }
 }

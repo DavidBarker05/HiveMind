@@ -9,18 +9,20 @@ public class HealthComponent : MonoBehaviour
     [SerializeField, Min(1)]
     int m_HealthPerUpgrade = 20;
 
-    public float MaxHealth { get; private set; }
-    public float CurrentHealth { get; private set; }
+    public int MaxHealth { get; private set; }
+    public int CurrentHealth { get; private set; }
 
     public bool IsDead => CurrentHealth == 0;
     public bool IsAlive => CurrentHealth > 0;
+
+    public static event System.Action<HealthComponent> OnAnyDamageTaken;
 
     public UnityEvent OnDeath;
     public UnityEvent OnDamageTaken;
 
     public void InitHealth(float multiplier = 1f)
     {
-        MaxHealth = m_BaseMaxHealth * multiplier;
+        MaxHealth = Mathf.RoundToInt(m_BaseMaxHealth * multiplier);
         CurrentHealth = MaxHealth;
     }
 
@@ -30,6 +32,7 @@ public class HealthComponent : MonoBehaviour
     {
         if (damage <= 0 || IsDead) return;
         CurrentHealth = Mathf.Max(CurrentHealth - damage, 0);
+        OnAnyDamageTaken?.Invoke(this);
         if (CurrentHealth == 0) OnDeath?.Invoke();
         else OnDamageTaken?.Invoke();
     }

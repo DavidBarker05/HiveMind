@@ -51,6 +51,8 @@ public class Rifle : Gun
         return true;
     }
 
+    public float SpreadNormalised => m_MaxSpread > 0f ? m_CurrentSpread / m_MaxSpread : 0f;
+
     public void StopAttacking() => m_bAttacking = false;
 
     public override void UpdateWeapon(float deltaTime)

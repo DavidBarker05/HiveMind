@@ -14,7 +14,7 @@ public class PausePlayerCharacterUpdateData : IPlayerCharacterUpdateData
 public class PausePlayerCharacter : PlayerCharacter
 {
     [SerializeField]
-    GameObject m_PauseScreen;
+    MenuHandler m_PauseScreen;
 
     public override bool HasBeenInitialised { get; protected set; }
 
@@ -59,7 +59,7 @@ public class PausePlayerCharacter : PlayerCharacter
         m_LastCharacter = characterToSwitchBackTo;
         CameraTarget = m_LastCharacter.CameraTarget;
         m_Player.ChangeCharacter(this);
-        m_PauseScreen.SetActive(true);
+        m_PauseScreen.gameObject.SetActive(true);
         Time.timeScale = 0f;
     }
 
@@ -76,7 +76,8 @@ public class PausePlayerCharacter : PlayerCharacter
         m_Player.ChangeCharacter(m_LastCharacter);
         m_LastCharacter = null;
         CameraTarget = null;
-        m_PauseScreen.SetActive(false);
+        m_PauseScreen.Close();
+        m_PauseScreen.gameObject.SetActive(false);
         Time.timeScale = 1f;
     }
 }

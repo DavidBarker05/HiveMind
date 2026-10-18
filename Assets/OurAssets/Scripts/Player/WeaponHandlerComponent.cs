@@ -20,13 +20,30 @@ public class WeaponHandlerComponent : MonoBehaviour
     [SerializeField]
     Katana m_KatanaPrefab;
 
+    [Header("Crosshairs (HUD objects, hidden until their gun is equipped)")]
+    [SerializeField]
+    Crosshair m_PistolCrosshair;
+    [SerializeField]
+    RifleCrosshair m_RifleCrosshair;
+    [SerializeField]
+    Crosshair m_GrenadeLauncherCrosshair;
+    [SerializeField]
+    Crosshair m_ShotgunCrosshair;
+
     readonly Dictionary<Type, Gun> m_Guns = new Dictionary<Type, Gun>();
+    readonly Dictionary<Type, Crosshair> m_Crosshairs = new Dictionary<Type, Crosshair>();
 
     public Gun CurrentGun { get; private set; }
     public MeleeWeapon CurrentMeleeWeapon { get; private set; }
 
     public void Init()
     {
+        m_Crosshairs[typeof(Pistol)] = m_PistolCrosshair;
+        m_Crosshairs[typeof(Rifle)] = m_RifleCrosshair;
+        m_Crosshairs[typeof(GrenadeLauncher)] = m_GrenadeLauncherCrosshair;
+        m_Crosshairs[typeof(Shotgun)] = m_ShotgunCrosshair;
+        foreach (Crosshair crosshair in m_Crosshairs.Values)
+            if (crosshair) crosshair.SetVisible(false);
         AddGun(m_PistolPrefab);
         Equip<Pistol>();
         AddMeleeWeapon(m_BatPrefab);
@@ -37,6 +54,13 @@ public class WeaponHandlerComponent : MonoBehaviour
     {
         foreach (Gun gun in m_Guns.Values) gun.UpdateWeapon(deltaTime);
         if (CurrentMeleeWeapon) CurrentMeleeWeapon.UpdateWeapon(deltaTime);
+        if (CurrentGun is Rifle rifle && m_RifleCrosshair) m_RifleCrosshair.SetSpread(rifle.SpreadNormalised);
+    }
+
+    void SetCrosshairVisible(Gun gun, bool bVisible)
+    {
+        if (gun && m_Crosshairs.TryGetValue(gun.GetType(), out Crosshair crosshair) && crosshair)
+            crosshair.SetVisible(bVisible);
     }
 
     void AddGun<T>(T prefab) where T : Gun
@@ -84,9 +108,11 @@ public class WeaponHandlerComponent : MonoBehaviour
         {
             if (CurrentGun is Rifle rifle) rifle.StopAttacking();
             CurrentGun.gameObject.SetActive(false);
+            SetCrosshairVisible(CurrentGun, false);
         }
         CurrentGun = gun;
         CurrentGun.gameObject.SetActive(true);
+        SetCrosshairVisible(CurrentGun, true);
         return true;
     }
 
