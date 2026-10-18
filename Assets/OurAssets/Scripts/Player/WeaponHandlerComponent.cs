@@ -30,6 +30,7 @@ public class WeaponHandlerComponent : MonoBehaviour
         AddGun(m_PistolPrefab);
         Equip<Pistol>();
         // AddMeleeWeapon(m_BatPrefab);
+        UpgradeSystem.Instance.OnUpgradePurchased += OnUpgradePurchased;
     }
 
     public void UpdateHandler(float deltaTime)
@@ -82,5 +83,26 @@ public class WeaponHandlerComponent : MonoBehaviour
         CurrentGun = gun;
         CurrentGun.gameObject.SetActive(true);
         return true;
+    }
+
+    void OnUpgradePurchased(UpgradeType upgradeType)
+    {
+        switch (upgradeType)
+        {
+            case UpgradeType.Rifle:
+                Purchase<Rifle>();
+                break;
+            case UpgradeType.GrenadeLauncher:
+                Purchase<GrenadeLauncher>();
+                break;
+            case UpgradeType.Shotgun:
+                Purchase<Shotgun>();
+                break;
+            case UpgradeType.Katana:
+                Purchase<Katana>();
+                break;
+            default:
+                break;
+        }
     }
 }
