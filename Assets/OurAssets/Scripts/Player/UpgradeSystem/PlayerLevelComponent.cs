@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class PlayerLevelComponent : MonoBehaviour
 {
     [SerializeField, Min(1)]
-    int m_BaseXP = 5;
+    int m_BaseXP = 100;
     [SerializeField, Min(1f)]
     float m_GrowthPerLevel = 8f;
     [SerializeField, Min(1f)]

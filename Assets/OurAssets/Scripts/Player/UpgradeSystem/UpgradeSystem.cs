@@ -48,4 +48,11 @@ public class UpgradeSystem : MonoBehaviour
         else if (!m_UpgradesPurchased.ContainsKey(upgrade.UpgradeType)) return 0;
         else return m_UpgradesPurchased[upgrade.UpgradeType];
     }
+
+    public int GetUpgradeLevel(UpgradeType upgrade)
+    {
+        if (upgrade == UpgradeType.None) throw new System.ArgumentException("Upgrade type cannot be none");
+        else if (!m_UpgradesPurchased.ContainsKey(upgrade)) return 0;
+        else return m_UpgradesPurchased[upgrade];
+    }
 }

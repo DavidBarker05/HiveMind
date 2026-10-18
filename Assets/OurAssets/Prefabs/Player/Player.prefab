@@ -472,8 +472,10 @@ GameObject:
   m_Component:
   - component: {fileID: 123941155484709079}
   - component: {fileID: 3389705744965587759}
-  - component: {fileID: 2748236525323853716}
   - component: {fileID: 1892419647633264564}
+  - component: {fileID: 2732225925480164097}
+  - component: {fileID: 4178352111431146036}
+  - component: {fileID: 2748236525323853716}
   m_Layer: 3
   m_Name: FirstPersonPlayerCharacter
   m_TagString: Untagged
@@ -523,21 +525,6 @@ CharacterController:
   m_SkinWidth: 0.001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!114 &2748236525323853716
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3563468873916805075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b8ff184735af854e864801016d262fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FirstPersonPlayerCharacter
-  <CameraTarget>k__BackingField: {fileID: 2439049054608134618}
-  m_Arms: {fileID: 6487043112275266991}
-  m_ArmsAnimator: {fileID: 1308139920797360657}
 --- !u!114 &1892419647633264564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -553,10 +540,62 @@ MonoBehaviour:
   m_WeaponSlot: {fileID: 6327216911349181258}
   m_PistolPrefab: {fileID: 5616132268291718340, guid: 1be89975b76483c4ba15de78caf20b09, type: 3}
   m_RiflePrefab: {fileID: 190411219736871896, guid: 7563bcf242598764782031f0c8120d0d, type: 3}
-  m_GrenadeLauncherPrefab: {fileID: 0}
+  m_GrenadeLauncherPrefab: {fileID: 5437266500713563046, guid: c3c9f57d29130f54d8434e6f43904057, type: 3}
   m_ShotgunPrefab: {fileID: 0}
   m_BatPrefab: {fileID: 0}
   m_KatanaPrefab: {fileID: 6092492026217653128, guid: f789143314b98fc4b8fb18a8f25fba84, type: 3}
+--- !u!114 &2732225925480164097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3563468873916805075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b58f706b6b4494ca8c15e25876f0a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
+  m_BaseMaxHealth: 100
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &4178352111431146036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3563468873916805075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c18984e467c5b74c9dab2cf50f0fd3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerLevelComponent
+  m_BaseXP: 100
+  m_GrowthPerLevel: 8
+  m_GrowthExponent: 1.15
+  OnLevelUp:
+    m_PersistentCalls:
+      m_Calls: []
+  OnXPChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2748236525323853716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3563468873916805075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b8ff184735af854e864801016d262fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstPersonPlayerCharacter
+  <CameraTarget>k__BackingField: {fileID: 2439049054608134618}
+  m_Arms: {fileID: 6487043112275266991}
+  m_ArmsAnimator: {fileID: 1308139920797360657}
 --- !u!1 &3636553792404819928
 GameObject:
   m_ObjectHideFlags: 0

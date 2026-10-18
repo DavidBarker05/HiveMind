@@ -60,7 +60,16 @@ public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
     #endregion
 }
 
-[RequireComponent(typeof(CharacterController), typeof(WeaponHandlerComponent))]
+[
+    RequireComponent(
+        typeof(CharacterController),
+        typeof(WeaponHandlerComponent),
+        typeof(HealthComponent)
+    ),
+    RequireComponent(
+        typeof(PlayerLevelComponent)
+    )
+]
 public class FirstPersonPlayerCharacter : PlayerCharacter
 {
     static readonly float s_Epsilon = 0.05f;
@@ -104,6 +113,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     CharacterSettings m_CharacterSettings;
     CharacterController m_CC;
     WeaponHandlerComponent m_WeaponComponent;
+    HealthComponent m_HealthComponent;
 
     bool m_bIsGrounded;
     bool m_bBumpedHead;
@@ -135,6 +145,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     {
         m_CC = GetComponent<CharacterController>();
         m_WeaponComponent = GetComponent<WeaponHandlerComponent>();
+        m_HealthComponent = GetComponent<HealthComponent>();
     }
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
@@ -144,6 +155,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         m_PausePlayerCharacter = initData.PausePlayerCharacter;
         m_Camera = initData.Camera;
         m_WeaponComponent.Init();
+        m_HealthComponent.InitHealth();
         HasBeenInitialised = true;
     }
 

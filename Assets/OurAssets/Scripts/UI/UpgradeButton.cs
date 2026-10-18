@@ -24,6 +24,14 @@ public class UpgradeButton : MonoBehaviour
         UpgradeSystem.Instance.OnUpgradePurchased.AddListener(UpdateButton);
     }
 
+    void Start()
+    {
+        FirstPersonPlayerCharacter player = FindAnyObjectByType<FirstPersonPlayerCharacter>();
+        if (!player) return;
+        PlayerLevelComponent levelComponent = player.GetComponent<PlayerLevelComponent>();
+        if (levelComponent) levelComponent.OnLevelUp.AddListener(UpdateButton); // In case player still levels up after this is enabled
+    }
+
     void OnEnable() => UpdateButton();
 
     void UpdateButton()
