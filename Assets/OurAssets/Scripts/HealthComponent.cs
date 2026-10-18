@@ -15,6 +15,9 @@ public class HealthComponent : MonoBehaviour
     public bool IsDead => CurrentHealth == 0;
     public bool IsAlive => CurrentHealth > 0;
 
+    public UnityEvent OnDeath;
+    public UnityEvent OnDamageTaken;
+
     public void InitHealth(float multiplier = 1f)
     {
         MaxHealth = m_BaseMaxHealth * multiplier;
@@ -23,13 +26,12 @@ public class HealthComponent : MonoBehaviour
 
     void Start() => CurrentHealth = MaxHealth;
 
-    public UnityEvent OnDeath;
-
     public void TakeDamage(int damage)
     {
         if (damage <= 0) return;
         CurrentHealth = Mathf.Max(CurrentHealth - damage, 0);
         if (CurrentHealth == 0) OnDeath?.Invoke();
+        else OnDamageTaken?.Invoke();
     }
 
     public void ReceiveHealth(int health)
