@@ -58,7 +58,12 @@ public class WeaponHandlerComponent : MonoBehaviour
     }
 
     public bool Shoot(Transform origin) => CurrentGun.Attack(origin);
-    public bool MeleeAttack(Transform origin) => CurrentMeleeWeapon.Attack(origin);
+    public bool MeleeAttack(Transform origin)
+    {
+        bool bDidSwing = CurrentMeleeWeapon.Attack(origin);
+        if (bDidSwing && CurrentMeleeWeapon.DidHitEnemy) CurrentGun.AddAmmo(CurrentGun.AmmoGainedOnMelee);
+        return bDidSwing;
+    }
 
     public void Purchase<T>() where T : Weapon
     {

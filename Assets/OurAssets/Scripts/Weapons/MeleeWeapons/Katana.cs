@@ -11,6 +11,7 @@ public class Katana : MeleeWeapon
         if (!CanAttack) return false;
         m_AttackCooldownRemaining = TimeBetweenAttacks;
         Collider[] enemies = GetEnemiesInAttackRadius(origin);
+        DidHitEnemy = enemies.Length > 0;
         foreach (Collider enemy in enemies)
         {
             if (!IsEnemyInAngle(origin, enemy)) continue;

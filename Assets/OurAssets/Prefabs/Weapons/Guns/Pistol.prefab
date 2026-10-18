@@ -55,9 +55,9 @@ MonoBehaviour:
   m_DamagePercentIncreasePerLevel: 0.1
   <Recoil>k__BackingField: 0.5
   m_BaseMaxReserveMagazines: 5
-  <MaxReserveAmmo>k__BackingField: 60
   <MagazineSize>k__BackingField: 12
   <StartingMagazines>k__BackingField: 3
+  <AmmoGainedOnMelee>k__BackingField: 6
   m_AttackRange: 500
   m_MuzzleFlash: {fileID: 7156725960658865825}
 --- !u!1001 &401304617700231830

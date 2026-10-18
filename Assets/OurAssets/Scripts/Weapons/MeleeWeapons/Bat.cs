@@ -22,7 +22,9 @@ public class Bat : MeleeWeapon
                 Vector3 force = toEnemy * KnockbackForce;
                 rb.AddForce(force, ForceMode.Impulse);
             }
+            DidHitEnemy = true;
         }
+        else DidHitEnemy = false;
         return true;
     }
 

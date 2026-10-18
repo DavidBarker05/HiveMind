@@ -55,9 +55,9 @@ MonoBehaviour:
   m_DamagePercentIncreasePerLevel: 0.1
   <Recoil>k__BackingField: 0.7
   m_BaseMaxReserveMagazines: 15
-  <MaxReserveAmmo>k__BackingField: 15
   <MagazineSize>k__BackingField: 1
   <StartingMagazines>k__BackingField: 3
+  <AmmoGainedOnMelee>k__BackingField: 1
   m_Barrel: {fileID: 6815022735570600534}
   m_GrenadePrefab: {fileID: 6898388008983067745, guid: e496ca70ef10cbc4cbe5bcd136e8d6b6, type: 3}
   m_GrenadeLaunchForce: 30

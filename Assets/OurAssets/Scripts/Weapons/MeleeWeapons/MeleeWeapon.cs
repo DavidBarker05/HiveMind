@@ -7,4 +7,6 @@ public abstract class MeleeWeapon : Weapon
     public float AttackRange { get; private set; }
     [field: SerializeField, Min(0f)]
     public float KnockbackForce { get; private set; }
+    [field: SerializeField]
+    public bool DidHitEnemy { get; protected set; }
 }

@@ -11,6 +11,8 @@ public abstract class Gun : Weapon
     public int MagazineSize { get; private set; }
     [field: SerializeField, Min(1)]
     public int StartingMagazines { get; private set; } = 3;
+    [field: SerializeField, Min(1)]
+    public int AmmoGainedOnMelee { get; private set; }
 
     public int MaxReserveMagazines => m_BaseMaxReserveMagazines + UpgradeSystem.Instance.GetUpgradeLevel(UpgradeType.AmmoCapacity);
 
