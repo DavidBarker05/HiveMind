@@ -199,6 +199,34 @@ MonoBehaviour:
   texture:
     m_OverrideState: 1
     m_Value: {fileID: 0}
+--- !u!114 &-5721721397502382558
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a9d2c6e8f1b4d7aa5c0e2b4d6f81a93, type: 3}
+  m_Name: HitScreenEffect
+  m_EditorClassIdentifier: Assembly-CSharp::HitScreenEffect
+  active: 1
+  Intensity:
+    m_OverrideState: 1
+    m_Value: 0
+  Color:
+    m_OverrideState: 1
+    m_Value: {r: 0.8, g: 0, b: 0, a: 1}
+  ClearCentre:
+    m_OverrideState: 1
+    m_Value: 0.35
+  Softness:
+    m_OverrideState: 1
+    m_Value: 0.5
+  CentreTint:
+    m_OverrideState: 1
+    m_Value: 0.05
 --- !u!114 &-5520245016509672950
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -469,6 +497,7 @@ MonoBehaviour:
   - {fileID: 7518938298396184218}
   - {fileID: -1410297666881709256}
   - {fileID: 336983225522118491}
+  - {fileID: -5721721397502382558}
 --- !u!114 &336983225522118491
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -495,17 +524,17 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0.15
   DitherPattern:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {fileID: 0}
     dimension: 1
   DitherPatternScale:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   DitherThreshold:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.75
   DitherIntensity:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.15
 --- !u!114 &853819529557874667
 MonoBehaviour:

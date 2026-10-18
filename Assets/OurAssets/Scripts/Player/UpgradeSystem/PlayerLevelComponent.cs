@@ -9,6 +9,14 @@ public class PlayerLevelComponent : MonoBehaviour
     float m_GrowthPerLevel = 8f;
     [SerializeField, Min(1f)]
     float m_GrowthExponent = 1.15f;
+    [SerializeField]
+    GameObject m_HUD;
+    [SerializeField]
+    GameObject m_LevelUpScreen;
+    [SerializeField]
+    FirstPersonPlayerCharacter m_FirstPersonCharacter;
+    [SerializeField]
+    MenuPlayerCharacter m_MenuCharacter;
 
     public int Level { get; private set; } = 1;
     public int CurrentXP { get; private set; }
@@ -34,6 +42,8 @@ public class PlayerLevelComponent : MonoBehaviour
         {
             OnLevelUp?.Invoke();
             UpgradeSystem.Instance.LevelUp();
+            if (m_MenuCharacter && m_FirstPersonCharacter)
+                m_MenuCharacter.OnMenuOpen(m_FirstPersonCharacter, m_HUD, m_LevelUpScreen);
         }
     }
 }

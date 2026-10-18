@@ -21,25 +21,25 @@ public class UpgradeSystem : MonoBehaviour
     public UnityEvent OnLevelPointsChanged;
     public System.Action<UpgradeType> OnUpgradePurchased;
 
-    int m_LevelPoints = 0;
+    public int LevelPoints { get; private set; } = 0;
     readonly Dictionary<UpgradeType, int> m_UpgradesPurchased = new Dictionary<UpgradeType, int>();
 
     public void LevelUp()
     {
-        ++m_LevelPoints;
+        ++LevelPoints;
         OnLevelPointsChanged?.Invoke();
     }
 
     public bool CanPurchaseUpgrade(Upgrade upgrade) =>
         upgrade.UpgradeType != UpgradeType.None
-        && m_LevelPoints >= upgrade.PointsCost
+        && LevelPoints >= upgrade.PointsCost
         && (upgrade.RequiredPreviousUpgrade == UpgradeType.None || m_UpgradesPurchased.ContainsKey(upgrade.RequiredPreviousUpgrade))
         && (!UpgradeHelper.IsUpgradeOneTimePurchase(upgrade) || !m_UpgradesPurchased.ContainsKey(upgrade.UpgradeType));
 
     public void PurchaseUpgrade(Upgrade upgrade)
     {
         if (!CanPurchaseUpgrade(upgrade)) return;
-        m_LevelPoints -= upgrade.PointsCost;
+        LevelPoints -= upgrade.PointsCost;
         if (!m_UpgradesPurchased.ContainsKey(upgrade.UpgradeType)) m_UpgradesPurchased.Add(upgrade.UpgradeType, 1);
         else ++m_UpgradesPurchased[upgrade.UpgradeType];
         OnLevelPointsChanged?.Invoke();
