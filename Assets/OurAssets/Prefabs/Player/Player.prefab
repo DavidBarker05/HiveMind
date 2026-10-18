@@ -475,6 +475,7 @@ GameObject:
   - component: {fileID: 1892419647633264564}
   - component: {fileID: 2732225925480164097}
   - component: {fileID: 4178352111431146036}
+  - component: {fileID: 7253512131138231426}
   - component: {fileID: 2748236525323853716}
   m_Layer: 3
   m_Name: FirstPersonPlayerCharacter
@@ -557,7 +558,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
   m_BaseMaxHealth: 100
+  m_HealthPerUpgrade: 20
   OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamageTaken:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4178352111431146036
@@ -581,6 +586,28 @@ MonoBehaviour:
   OnXPChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7253512131138231426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3563468873916805075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfb64cb6154f41b43b28282ab49e9ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHitScreenEffect
+  m_HealthComponent: {fileID: 2732225925480164097}
+  m_MaxIntensity: 0.6
+  m_FadeInDuration: 0.05
+  m_FadeOutDuration: 0.4
+  m_VolumeLayer: 0
+  m_VolumePriority: 100
+  m_Color: {r: 0.8, g: 0, b: 0, a: 1}
+  m_ClearCentre: 0.35
+  m_Softness: 0.5
+  m_CentreTint: 0.05
 --- !u!114 &2748236525323853716
 MonoBehaviour:
   m_ObjectHideFlags: 0

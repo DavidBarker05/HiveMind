@@ -67,7 +67,8 @@ public class FirstPersonPlayerCharacterUpdateData : IPlayerCharacterUpdateData
         typeof(HealthComponent)
     ),
     RequireComponent(
-        typeof(PlayerLevelComponent)
+        typeof(PlayerLevelComponent),
+        typeof(PlayerHitScreenEffect)
     )
 ]
 public class FirstPersonPlayerCharacter : PlayerCharacter

@@ -17,18 +17,7 @@ namespace Util
 			public static GameObject GetGameObject(this RaycastHit hitInfo) => hitInfo.collider.gameObject;
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static T GetComponent<T>(this RaycastHit hitInfo)
-			{
-				return hitInfo.collider.gameObject.GetComponent<T>();
-				GameObject go = hitInfo.collider.gameObject;
-				T comp;
-				do
-				{
-					comp = go.GetComponent<T>();
-					go = go.transform.parent.gameObject;
-				} while (comp == null && go.transform.parent != null);
-				return comp;
-			}
+			public static T GetComponent<T>(this RaycastHit hitInfo) => hitInfo.collider.gameObject.GetComponent<T>();
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static T GetComponent<T>(this Collider collider) => collider.gameObject.GetComponent<T>();
