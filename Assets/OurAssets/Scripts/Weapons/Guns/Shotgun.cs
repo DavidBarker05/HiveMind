@@ -26,7 +26,7 @@ public class Shotgun : Gun
         hitInfo: out hitInfo,
         maxDistance: m_AttackRange,
         layerMask: HittableLayers,
-        queryTriggerInteraction: QueryTriggerInteraction.Collide
+        queryTriggerInteraction: QueryTriggerInteraction.Ignore
     );
 
     public override bool Attack(Transform origin)

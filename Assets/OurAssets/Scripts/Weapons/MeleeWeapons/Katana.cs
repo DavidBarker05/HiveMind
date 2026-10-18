@@ -11,10 +11,11 @@ public class Katana : MeleeWeapon
         if (!CanAttack) return false;
         m_AttackCooldownRemaining = TimeBetweenAttacks;
         Collider[] enemies = GetEnemiesInAttackRadius(origin);
-        DidHitEnemy = enemies.Length > 0;
+        DidHitEnemy = false;
         foreach (Collider enemy in enemies)
         {
             if (!IsEnemyInAngle(origin, enemy)) continue;
+            DidHitEnemy = true;
             HealthComponent healthComponent = enemy.gameObject.GetComponent<HealthComponent>();
             if (healthComponent) healthComponent.TakeDamage(Damage);
             Rigidbody rb = enemy.gameObject.GetComponent<Rigidbody>();
@@ -37,7 +38,7 @@ public class Katana : MeleeWeapon
         position: origin.position,
         radius: AttackRange,
         layerMask: HittableLayers,
-        queryTriggerInteraction: QueryTriggerInteraction.Collide
+        queryTriggerInteraction: QueryTriggerInteraction.Ignore
     );
 
     bool IsEnemyInAngle(Transform origin, Collider enemy) =>

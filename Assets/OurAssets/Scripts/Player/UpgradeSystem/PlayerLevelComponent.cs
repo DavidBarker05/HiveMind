@@ -31,17 +31,18 @@ public class PlayerLevelComponent : MonoBehaviour
     public void AddXP(int amount)
     {
         CurrentXP += amount;
-        bool bLevelUp = CurrentXP >= RequiredXP;
+        int levelsGained = 0;
         while (CurrentXP >= RequiredXP)
         {
             CurrentXP -= RequiredXP;
             ++Level;
+            ++levelsGained;
         }
         OnXPChanged?.Invoke();
-        if (bLevelUp)
+        if (levelsGained > 0)
         {
             OnLevelUp?.Invoke();
-            UpgradeSystem.Instance.LevelUp();
+            for (int i = 0; i < levelsGained; ++i) UpgradeSystem.Instance.LevelUp();
             if (m_MenuCharacter && m_FirstPersonCharacter)
                 m_MenuCharacter.OnMenuOpen(m_FirstPersonCharacter, m_HUD, m_LevelUpScreen);
         }

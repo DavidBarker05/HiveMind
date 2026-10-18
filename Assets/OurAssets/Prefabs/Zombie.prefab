@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6757390503603905467}
   - component: {fileID: 3855793730135446629}
   - component: {fileID: 2220952153898218797}
+  - component: {fileID: 7709700898127921761}
   - component: {fileID: 292558641744807251}
   - component: {fileID: 6746374057446475829}
   - component: {fileID: 6521290201584988133}
@@ -135,6 +136,29 @@ CapsuleCollider:
   m_Height: 1.7
   m_Direction: 1
   m_Center: {x: 0, y: 0.85, z: 0}
+--- !u!136 &7709700898127921761
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7672801158948367119}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1.75
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.875, z: 0}
 --- !u!54 &292558641744807251
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -212,6 +236,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Zombie
   m_Speed: 5
   m_BaseDamage: 10
+  m_TimeBetweenAttacks: 0.5
+  m_Debug: 0
   m_ClimbableMask:
     serializedVersion: 2
     m_Bits: 0

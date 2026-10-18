@@ -52,6 +52,7 @@ public class MenuPlayerCharacter : PlayerCharacter
         m_Player.ChangeCharacter(this);
         m_LastUI = currentUI;
         m_CurrentUI = newUI;
+        m_LastUI?.SetActive(false);
         m_CurrentUI.SetActive(true);
         Time.timeScale = 0f;
     }

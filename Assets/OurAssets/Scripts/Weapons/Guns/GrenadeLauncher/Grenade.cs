@@ -32,6 +32,7 @@ public class Grenade : MonoBehaviour
         if (!m_bPrimed) return;
         m_CurrentTime += Time.deltaTime;
         if (m_CurrentTime < m_ExplosionTime) return;
+        m_bPrimed = false;
         Collider[] hitEnemies = Physics.OverlapSphere(transform.position, m_ExplosionRadius, m_DamageableLayers, QueryTriggerInteraction.Collide);
         foreach (Collider enemy in hitEnemies)
         {
@@ -40,7 +41,7 @@ public class Grenade : MonoBehaviour
                 end: enemy.bounds.center,
                 hitInfo: out RaycastHit hitInfo,
                 layerMask: m_HittableLayers,
-                queryTriggerInteraction: QueryTriggerInteraction.Collide))
+                queryTriggerInteraction: QueryTriggerInteraction.Ignore))
             {
                 HealthComponent healthComponent = hitInfo.GetComponent<HealthComponent>();
                 if (healthComponent) healthComponent.TakeDamage(m_Damage);

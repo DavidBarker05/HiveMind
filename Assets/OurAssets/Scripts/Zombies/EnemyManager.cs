@@ -22,7 +22,7 @@ public class EnemyManager : MonoBehaviour
     [SerializeField]
     float m_SpawnInterval = 2f;
     [SerializeField, Min(10)]
-    int m_MaxAlive = 500;
+    int m_MaxAlive = 100;
     [SerializeField, Min(1f)]
     float m_SecondsBetweenWaves = 10f;
     [SerializeField, Min(0.001f)]
@@ -57,6 +57,7 @@ public class EnemyManager : MonoBehaviour
 
     void Start()
     {
+        if (Instance != this) return;
         m_Player = FindAnyObjectByType<FirstPersonPlayerCharacter>();
         BuildChunkMap();
         StartCoroutine(WaveCooldown()); // Small break at the start of the game
@@ -112,6 +113,7 @@ public class EnemyManager : MonoBehaviour
         {
             yield return new WaitWhile(() => m_SpawnedEnemies.Count >= m_MaxAlive);
             SpawnEnemy();
+            ++enemiesSpawnedThisWave;
             yield return new WaitForSeconds(m_SpawnInterval);
         }
         StartCoroutine(WaveCooldown());
@@ -126,12 +128,12 @@ public class EnemyManager : MonoBehaviour
 
     void SpawnEnemy()
     {
+        if (!m_Player) return;
         Transform point = ChooseSpawnPoint();
         if (!point) return;
         Zombie zombie = Instantiate(m_ZombiePrefab, point.position, point.rotation);
+        zombie.Init(m_Player, HealthMultiplier(m_Wave), DamageMultiplier(m_Wave));
         m_SpawnedEnemies.Add(zombie);
-        if (zombie && m_Player)
-            zombie.Init(m_Player, HealthMultiplier(m_Wave), DamageMultiplier(m_Wave));
     }
 
     Transform ChooseSpawnPoint()

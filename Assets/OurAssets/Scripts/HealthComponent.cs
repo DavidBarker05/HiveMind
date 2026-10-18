@@ -28,7 +28,7 @@ public class HealthComponent : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        if (damage <= 0) return;
+        if (damage <= 0 || IsDead) return;
         CurrentHealth = Mathf.Max(CurrentHealth - damage, 0);
         if (CurrentHealth == 0) OnDeath?.Invoke();
         else OnDamageTaken?.Invoke();

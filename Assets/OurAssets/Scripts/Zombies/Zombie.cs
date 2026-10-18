@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 [
     RequireComponent(
@@ -16,19 +17,26 @@ public class Zombie : MonoBehaviour
     float m_Speed = 5f;
     [SerializeField]
     float m_BaseDamage = 10f;
+    [SerializeField, Min(0.01f)]
+    float m_TimeBetweenAttacks = 0.5f;
 #if UNITY_EDITOR
     [SerializeField]
     bool m_Debug;
 #endif
 
-    float m_Damage;
+    int m_Damage;
 
     [Header("Climbing")]
-    [SerializeField] LayerMask m_ClimbableMask;
-    [SerializeField, Min(0f)] float m_WallCheckDistance = 0.3f;
-    [SerializeField, Min(0.01f)] float m_ClimbSpeed = 3f;
+    [SerializeField]
+    LayerMask m_ClimbableMask;
+    [SerializeField, Min(0f)]
+    float m_WallCheckDistance = 0.3f;
+    [SerializeField, Min(0.01f)]
+    float m_ClimbSpeed = 3f;
 
     FirstPersonPlayerCharacter m_Player;
+
+    bool m_bDamagePlayer = false;
 
     Rigidbody m_RB;
     CapsuleCollider m_Capsule;
@@ -49,7 +57,7 @@ public class Zombie : MonoBehaviour
     public void Init(FirstPersonPlayerCharacter player, float healthMult, float damageMult)
     {
         m_Player = player;
-        m_Damage = m_BaseDamage * damageMult;
+        m_Damage = Mathf.RoundToInt(m_BaseDamage * damageMult);
         HealthComponent healthComponent = GetComponent<HealthComponent>();
         healthComponent.InitHealth(healthMult);
         GetComponent<AnimatedMesh>().Play("run");
@@ -64,6 +72,7 @@ public class Zombie : MonoBehaviour
     // Thank you vedinad for telling me to use rigid body
     public void ZombieFixedUpdate()
     {
+        if (!m_Player) return;
         Vector3 toPlayer = m_Player.transform.position - m_RB.position;
         toPlayer.y = 0f;
         if (toPlayer.sqrMagnitude < 0.0001f) return;
@@ -85,7 +94,25 @@ public class Zombie : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            // TODO: Damage Player
+            m_bDamagePlayer = true;
+            StopAllCoroutines();
+            StartCoroutine(DamageCycle());
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        m_bDamagePlayer = false;
+        StopAllCoroutines(); // Just in case
+    }
+
+    IEnumerator DamageCycle()
+    {
+        HealthComponent healthComponent = m_Player.GetComponent<HealthComponent>();
+        while (m_bDamagePlayer && healthComponent)
+        {
+            healthComponent.TakeDamage(m_Damage);
+            yield return new WaitForSeconds(m_TimeBetweenAttacks);
         }
     }
 }

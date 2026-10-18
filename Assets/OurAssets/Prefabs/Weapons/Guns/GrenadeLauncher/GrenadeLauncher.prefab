@@ -49,7 +49,7 @@ MonoBehaviour:
   <IsRapidFire>k__BackingField: 0
   <HittableLayers>k__BackingField:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   <TimeBetweenAttacks>k__BackingField: 0.01
   m_BaseDamage: 0
   m_DamagePercentIncreasePerLevel: 0.1
@@ -59,6 +59,9 @@ MonoBehaviour:
   <StartingMagazines>k__BackingField: 3
   <AmmoGainedOnMelee>k__BackingField: 1
   m_Barrel: {fileID: 6815022735570600534}
+  m_DamageableLayers:
+    serializedVersion: 2
+    m_Bits: 128
   m_GrenadePrefab: {fileID: 6898388008983067745, guid: e496ca70ef10cbc4cbe5bcd136e8d6b6, type: 3}
   m_GrenadeLaunchForce: 30
 --- !u!1 &2449719773330255720

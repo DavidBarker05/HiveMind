@@ -21,6 +21,7 @@ public class UpgradeButton : MonoBehaviour
         m_Button = GetComponent<Button>();
         m_UpgradeName = UpgradeHelper.UpgradeDisplayName(m_Upgrade);
         m_CostText = $"{m_Upgrade.PointsCost} Points";
+        m_Button.onClick.AddListener(() => UpgradeSystem.Instance.PurchaseUpgrade(m_Upgrade));
         UpgradeSystem.Instance.OnLevelPointsChanged.AddListener(UpdateButton);
     }
 

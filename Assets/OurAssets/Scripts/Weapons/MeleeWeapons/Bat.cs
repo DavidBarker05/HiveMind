@@ -40,6 +40,6 @@ public class Bat : MeleeWeapon
         hitInfo: out hitInfo,
         maxDistance: AttackRange,
         layerMask: HittableLayers,
-        queryTriggerInteraction: QueryTriggerInteraction.Collide
+        queryTriggerInteraction: QueryTriggerInteraction.Ignore
     );
 }
