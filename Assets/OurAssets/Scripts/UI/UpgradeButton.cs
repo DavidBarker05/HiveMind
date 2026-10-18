@@ -21,15 +21,7 @@ public class UpgradeButton : MonoBehaviour
         m_Button = GetComponent<Button>();
         m_UpgradeName = UpgradeHelper.UpgradeDisplayName(m_Upgrade);
         m_CostText = $"{m_Upgrade.PointsCost} Points";
-        UpgradeSystem.Instance.OnUpgradePurchased.AddListener(UpdateButton);
-    }
-
-    void Start()
-    {
-        FirstPersonPlayerCharacter player = FindAnyObjectByType<FirstPersonPlayerCharacter>();
-        if (!player) return;
-        PlayerLevelComponent levelComponent = player.GetComponent<PlayerLevelComponent>();
-        if (levelComponent) levelComponent.OnLevelUp.AddListener(UpdateButton); // In case player still levels up after this is enabled
+        UpgradeSystem.Instance.OnLevelPointsChanged.AddListener(UpdateButton);
     }
 
     void OnEnable() => UpdateButton();
