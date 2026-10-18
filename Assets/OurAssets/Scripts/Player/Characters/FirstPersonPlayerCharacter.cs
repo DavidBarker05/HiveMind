@@ -129,7 +129,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     bool m_bIsSprinting;
     float m_MovementSpeed;
 
-    bool m_bMeleeing = false;
+    bool m_bAttackLocked = false;
 
     bool m_bReloading = false;
     bool m_bReloadCancelled = false;
@@ -297,7 +297,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     void HandleWeapons(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
         if (updateData.ShootReleased && m_WeaponComponent.CurrentGun is Rifle rifle) rifle.StopAttacking();
-        if (!m_bMeleeing) ResolveWeaponActions(ref updateData);
+        if (!m_bAttackLocked) ResolveWeaponActions(ref updateData);
         updateData.ClearWeaponRequests();
     }
 
@@ -356,7 +356,15 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         updateData.DoRecoil = true;
         updateData.RecoilAmount = gun.Recoil;
         string attackAnim = AttackAnimation(gun);
-        if (!string.IsNullOrEmpty(attackAnim)) m_ArmsAnimator.Play(attackAnim, -1, 0f);
+        if (!string.IsNullOrEmpty(attackAnim))
+        {
+            m_ArmsAnimator.Play(attackAnim, -1, 0f);
+            if (gun is GrenadeLauncher)
+            {
+                m_bAttackLocked = true;
+                StartCoroutine(CheckForAttackAnimationEnd(attackAnim));
+            }
+        }
         return true;
     }
 
@@ -383,8 +391,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         if (!string.IsNullOrEmpty(attackAnim))
         {
             m_ArmsAnimator.Play(attackAnim, -1, 0f);
-            m_bMeleeing = true;
-            StartCoroutine(CheckForMeleeAttackEnd(attackAnim));
+            m_bAttackLocked = true;
+            StartCoroutine(CheckForAttackAnimationEnd(attackAnim));
         }
         return true;
     }
@@ -434,7 +442,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         PlayIdle();
     }
 
-    IEnumerator CheckForMeleeAttackEnd(string attackAnim)
+    IEnumerator CheckForAttackAnimationEnd(string attackAnim)
     {
         int framesToEnter = 2;
         bool bEntered = false;
@@ -454,7 +462,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             else if (bEntered || --framesToEnter < 0) break;
             yield return null;
         }
-        m_bMeleeing = false;
+        m_bAttackLocked = false;
         if (bFinished && !m_bReloading) PlayIdle();
     }
     #endregion
