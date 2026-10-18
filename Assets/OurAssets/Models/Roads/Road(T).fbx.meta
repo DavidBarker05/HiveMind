@@ -3,7 +3,17 @@ guid: b42056a2e94d75d4fb1bc04303731b07
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Paving(T) (Baked)
+    second: {fileID: 2100000, guid: 93c306b2cb380534b933750f84fb7665, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Road(T) (Baked)
+    second: {fileID: 2100000, guid: d23bd1c164714b945a94a62b41f365cd, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

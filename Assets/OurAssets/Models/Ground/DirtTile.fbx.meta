@@ -3,7 +3,12 @@ guid: 3f406274cb13a254ba08bb0b63a84c0a
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Soil (Baked)
+    second: {fileID: 2100000, guid: 049afc5b271830342a5c54e79568185f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

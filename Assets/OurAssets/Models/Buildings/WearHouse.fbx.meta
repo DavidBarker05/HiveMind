@@ -3,7 +3,17 @@ guid: b23d0e8a313439b44b5075f5821e6edb
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Aged Concrete + Moss (Baked)
+    second: {fileID: 2100000, guid: 26682e6c6f3f1514fb7effb1656d95fb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Old Red Brick + Moss (Baked)
+    second: {fileID: 2100000, guid: dcbec91e935794748aa2617d41def492, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

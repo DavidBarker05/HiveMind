@@ -516,7 +516,7 @@ MonoBehaviour:
     m_Value: 0
   PixelScale:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 4
   FixedVerticalResolution:
     m_OverrideState: 1
     m_Value: 480
@@ -524,17 +524,17 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 0.15
   DitherPattern:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: {fileID: 0}
     dimension: 1
   DitherPatternScale:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 1
   DitherThreshold:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.75
   DitherIntensity:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.15
 --- !u!114 &853819529557874667
 MonoBehaviour:

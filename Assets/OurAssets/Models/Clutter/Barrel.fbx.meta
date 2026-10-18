@@ -3,7 +3,12 @@ guid: bdefdec598dd5a84c826140b1d31af1c
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rusted Steel + Paint (Baked)
+    second: {fileID: 2100000, guid: 1a69a961603e1064f81ee04097a39d92, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

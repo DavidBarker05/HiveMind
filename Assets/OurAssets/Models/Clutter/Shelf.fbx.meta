@@ -3,7 +3,17 @@ guid: d54a0f7de8942b241998eab008bc90b6
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Burl (Baked)
+    second: {fileID: 2100000, guid: a3c96bc531c0bf5438e83ed375603627, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 7bd92e8965933d244b200679b11993c5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

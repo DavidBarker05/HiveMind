@@ -3,7 +3,17 @@ guid: 1c42509d719844148a696d4d23bfbb14
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Slate Tile + Moss (Baked)
+    second: {fileID: 2100000, guid: 4a1bdd1d6436de144b4763e83bb06d74, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Worn Asphalt + Grass (Baked)
+    second: {fileID: 2100000, guid: 502cf0683badf124a893ebf76e0e939e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

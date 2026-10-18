@@ -3,7 +3,32 @@ guid: 763d4ba3f7867bd4fa65fc251e3eddc4
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Doors
+    second: {fileID: 2100000, guid: da9d1a8b913f6cf46995a2d64f7ecaad, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Old Mossy Tiles Roofing (Baked)
+    second: {fileID: 2100000, guid: d44e9332b93ea84459ae5acfd5007dd5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Old Red Brick + Paint + Moss (Baked).001
+    second: {fileID: 2100000, guid: 7ef5bcb516981ac48aae3363fbe410dc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Pipes
+    second: {fileID: 2100000, guid: a781213ec4adb9746b49dc07814af891, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Windows
+    second: {fileID: 2100000, guid: 1ef9a2d9fc6e6a14c806b1d202813778, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

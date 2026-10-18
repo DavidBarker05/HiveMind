@@ -3,7 +3,17 @@ guid: 58e4bca547eaf8e43afebc9fdb754a73
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Straight Grain (Baked)
+    second: {fileID: 2100000, guid: 52f9554e49152ac4a8c1b8bf52b8bef4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Straight Grain.001 (Baked)
+    second: {fileID: 2100000, guid: 746517aa35602724f82f587a781abd14, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
