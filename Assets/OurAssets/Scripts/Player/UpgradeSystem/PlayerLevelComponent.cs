@@ -26,6 +26,8 @@ public class PlayerLevelComponent : MonoBehaviour
     public UnityEvent OnLevelUp;
     public UnityEvent OnXPChanged;
 
+    void Awake() => UpgradeSystem.Instance.ResetProgress();
+
     int XPForLevel(int level) => m_BaseXP + Mathf.RoundToInt(m_GrowthPerLevel * Mathf.Pow(level - 1, m_GrowthExponent));
 
     public void AddXP(int amount)

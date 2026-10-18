@@ -149,6 +149,12 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         m_HealthComponent = GetComponent<HealthComponent>();
     }
 
+    void OnDestroy()
+    {
+        UpgradeSystem system = UpgradeSystem.InstanceOrNull;
+        if (system && m_HealthComponent) system.OnUpgradePurchased -= m_HealthComponent.OnUpgradePurchased;
+    }
+
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
         FirstPersonPlayerCharacterInitData initData = Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));

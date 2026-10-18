@@ -11,7 +11,16 @@ public class LevelDisplay : MonoBehaviour
     [SerializeField]
     PlayerLevelComponent m_PlayerLevelComponent;
 
-    void Awake() => m_PlayerLevelComponent.OnXPChanged.AddListener(UpdateLevelDisplay);
+    void Awake()
+    {
+        m_PlayerLevelComponent.OnXPChanged.AddListener(UpdateLevelDisplay);
+        if (m_ExperienceBar)
+        {
+            m_ExperienceBar.wholeNumbers = false;
+            m_ExperienceBar.minValue = 0f;
+            m_ExperienceBar.maxValue = 1f;
+        }
+    }
 
     void OnEnable() => UpdateLevelDisplay();
 

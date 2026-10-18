@@ -57,7 +57,7 @@ MonoBehaviour:
   m_BaseMaxReserveMagazines: 6
   <MagazineSize>k__BackingField: 30
   <StartingMagazines>k__BackingField: 3
-  <AmmoGainedOnMelee>k__BackingField: 10
+  <AmmoGainedOnMelee>k__BackingField: 30
   m_AttackRange: 750
   m_SpreadPerShot: 0.4
   m_MaxSpread: 1.5

@@ -116,7 +116,14 @@ public class EnemyManager : MonoBehaviour
             ++enemiesSpawnedThisWave;
             yield return new WaitForSeconds(m_SpawnInterval);
         }
+        yield return new WaitUntil(AllEnemiesDefeated);
         StartCoroutine(WaveCooldown());
+    }
+
+    bool AllEnemiesDefeated()
+    {
+        m_SpawnedEnemies.RemoveWhere(zombie => !zombie);
+        return m_SpawnedEnemies.Count == 0;
     }
 
     IEnumerator WaveCooldown()

@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a01780cbe021dae4f9aa2770f6af497c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Zombie
-  m_Speed: 5
+  m_Speed: 4
   m_BaseDamage: 10
   m_TimeBetweenAttacks: 1
   m_Debug: 0
@@ -242,4 +242,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 129
   m_WallCheckDistance: 0.3
-  m_ClimbSpeed: 3
+  m_ClimbSpeed: 2.5

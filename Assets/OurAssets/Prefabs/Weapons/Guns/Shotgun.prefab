@@ -57,7 +57,7 @@ MonoBehaviour:
   m_BaseMaxReserveMagazines: 9
   <MagazineSize>k__BackingField: 2
   <StartingMagazines>k__BackingField: 4
-  <AmmoGainedOnMelee>k__BackingField: 1
+  <AmmoGainedOnMelee>k__BackingField: 2
   m_AttackRange: 400
   m_NumBullets: 7
   m_BulletSpread: 5

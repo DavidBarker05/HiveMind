@@ -12,17 +12,27 @@ public class UpgradeSystem : MonoBehaviour
             if (!s_Instance)
             {
                 GameObject go = new GameObject(nameof(UpgradeSystem));
+                DontDestroyOnLoad(go);
                 s_Instance = go.AddComponent<UpgradeSystem>();
             }
             return s_Instance;
         }
     }
 
-    public UnityEvent OnLevelPointsChanged;
+    public static UpgradeSystem InstanceOrNull => s_Instance ? s_Instance : null;
+
+    public UnityEvent OnLevelPointsChanged = new UnityEvent();
     public System.Action<UpgradeType> OnUpgradePurchased;
 
     public int LevelPoints { get; private set; } = 0;
     readonly Dictionary<UpgradeType, int> m_UpgradesPurchased = new Dictionary<UpgradeType, int>();
+
+    public void ResetProgress()
+    {
+        LevelPoints = 0;
+        m_UpgradesPurchased.Clear();
+        OnLevelPointsChanged?.Invoke();
+    }
 
     public void LevelUp()
     {

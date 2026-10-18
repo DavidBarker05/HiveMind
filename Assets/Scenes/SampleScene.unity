@@ -168002,7 +168002,7 @@ MonoBehaviour:
   m_MaxDamageMultiplier: 3
   m_ChunkSize: 30
   m_MinChunkDistanceFromPlayer: 2
-  m_BaseExperiencePerZombie: 10
+  m_BaseExperiencePerZombie: 25
   m_ExtraExperiencePerUpgrade: 0.1
 --- !u!4 &1916534570
 Transform:

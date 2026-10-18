@@ -12,6 +12,8 @@ public class Shotgun : Gun
     float m_BulletSpread = 5f;
     [SerializeField]
     ParticleSystem m_MuzzleFlash;
+    [SerializeField, Min(0.001f)]
+    float m_BulletRadius = 0.05f;
 
     Vector3 GetSpreadDirection(Transform origin, float spreadDegrees)
     {
@@ -20,8 +22,9 @@ public class Shotgun : Gun
         return (origin.forward + origin.right * offset.x + origin.up * offset.y).normalized;
     }
 
-    bool Shoot(Transform origin, Vector3 direction, out RaycastHit hitInfo) => Physics.Raycast(
+    bool Shoot(Transform origin, Vector3 direction, out RaycastHit hitInfo) => Physics.SphereCast(
         origin: origin.position,
+        radius: m_BulletRadius,
         direction: direction,
         hitInfo: out hitInfo,
         maxDistance: m_AttackRange,

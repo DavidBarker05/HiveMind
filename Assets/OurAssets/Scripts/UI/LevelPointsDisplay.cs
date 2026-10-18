@@ -17,5 +17,11 @@ public class LevelPointsDisplay : MonoBehaviour
 
     void OnEnable() => UpdateLevelPoints();
 
+    void OnDestroy()
+    {
+        UpgradeSystem system = UpgradeSystem.InstanceOrNull;
+        if (system) system.OnLevelPointsChanged.RemoveListener(UpdateLevelPoints);
+    }
+
     void UpdateLevelPoints() => m_Text.text = string.Format(m_Format, UpgradeSystem.Instance.LevelPoints);
 }

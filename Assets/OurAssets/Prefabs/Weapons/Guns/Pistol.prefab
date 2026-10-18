@@ -57,7 +57,7 @@ MonoBehaviour:
   m_BaseMaxReserveMagazines: 5
   <MagazineSize>k__BackingField: 12
   <StartingMagazines>k__BackingField: 3
-  <AmmoGainedOnMelee>k__BackingField: 6
+  <AmmoGainedOnMelee>k__BackingField: 12
   m_AttackRange: 500
   m_MuzzleFlash: {fileID: 7156725960658865825}
 --- !u!1001 &401304617700231830

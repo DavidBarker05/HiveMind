@@ -30,14 +30,21 @@ public class WeaponHandlerComponent : MonoBehaviour
     [SerializeField]
     Crosshair m_ShotgunCrosshair;
 
+    [Header("Melee")]
+    [SerializeField, Range(0f, 1f), Tooltip("Fraction of max health restored by a melee attack that hits an enemy.")]
+    float m_HealthGainedOnMelee = 0.02f;
+
     readonly Dictionary<Type, Gun> m_Guns = new Dictionary<Type, Gun>();
     readonly Dictionary<Type, Crosshair> m_Crosshairs = new Dictionary<Type, Crosshair>();
+
+    HealthComponent m_Health;
 
     public Gun CurrentGun { get; private set; }
     public MeleeWeapon CurrentMeleeWeapon { get; private set; }
 
     public void Init()
     {
+        m_Health = GetComponent<HealthComponent>();
         m_Crosshairs[typeof(Pistol)] = m_PistolCrosshair;
         m_Crosshairs[typeof(Rifle)] = m_RifleCrosshair;
         m_Crosshairs[typeof(GrenadeLauncher)] = m_GrenadeLauncherCrosshair;
@@ -48,6 +55,12 @@ public class WeaponHandlerComponent : MonoBehaviour
         Equip<Pistol>();
         AddMeleeWeapon(m_BatPrefab);
         UpgradeSystem.Instance.OnUpgradePurchased += OnUpgradePurchased;
+    }
+
+    void OnDestroy()
+    {
+        UpgradeSystem system = UpgradeSystem.InstanceOrNull;
+        if (system) system.OnUpgradePurchased -= OnUpgradePurchased;
     }
 
     public void UpdateHandler(float deltaTime)
@@ -85,7 +98,12 @@ public class WeaponHandlerComponent : MonoBehaviour
     public bool MeleeAttack(Transform origin)
     {
         bool bDidSwing = CurrentMeleeWeapon.Attack(origin);
-        if (bDidSwing && CurrentMeleeWeapon.DidHitEnemy) CurrentGun.AddAmmo(CurrentGun.AmmoGainedOnMelee);
+        if (bDidSwing && CurrentMeleeWeapon.DidHitEnemy)
+        {
+            CurrentGun.AddAmmo(CurrentGun.AmmoGainedOnMelee);
+            if (m_Health && m_Health.IsAlive)
+                m_Health.ReceiveHealth(Mathf.Max(1, Mathf.RoundToInt(m_Health.MaxHealth * m_HealthGainedOnMelee)));
+        }
         return bDidSwing;
     }
 

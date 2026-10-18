@@ -27,6 +27,12 @@ public class UpgradeButton : MonoBehaviour
 
     void OnEnable() => UpdateButton();
 
+    void OnDestroy()
+    {
+        UpgradeSystem system = UpgradeSystem.InstanceOrNull;
+        if (system) system.OnLevelPointsChanged.RemoveListener(UpdateButton);
+    }
+
     void UpdateButton()
     {
         m_PurchasedLevelText =

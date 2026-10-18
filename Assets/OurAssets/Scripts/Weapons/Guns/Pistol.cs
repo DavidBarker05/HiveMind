@@ -8,9 +8,12 @@ public class Pistol : Gun
     float m_AttackRange;
     [SerializeField]
     ParticleSystem m_MuzzleFlash;
+    [SerializeField, Min(0.001f)]
+    float m_BulletRadius = 0.05f;
 
-    bool Shoot(Transform origin, out RaycastHit hitInfo) => Physics.Raycast(
+    bool Shoot(Transform origin, out RaycastHit hitInfo) => Physics.SphereCast(
         origin: origin.position,
+        radius: m_BulletRadius,
         direction: origin.forward,
         maxDistance: m_AttackRange,
         hitInfo: out hitInfo,
