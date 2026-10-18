@@ -19,6 +19,7 @@ namespace Util
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static T GetComponent<T>(this RaycastHit hitInfo)
 			{
+				return hitInfo.collider.gameObject.GetComponent<T>();
 				GameObject go = hitInfo.collider.gameObject;
 				T comp;
 				do

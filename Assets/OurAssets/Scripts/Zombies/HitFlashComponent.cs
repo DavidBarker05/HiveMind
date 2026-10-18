@@ -12,16 +12,23 @@ public class HitFlashComponent : MonoBehaviour
     [SerializeField, Min(0.001f)]
     float m_ColorFlashDuration = 0.1f;
 
-    Color m_OriginalColor;
     Coroutine m_FlashCoroutine;
+    MaterialPropertyBlock m_PropertyBlock;
+    int m_EmissionColorId;
 
-    void Start() => m_OriginalColor = m_Renderer.material.GetColor(m_EmissionColorProperty);
+    void Awake()
+    {
+        m_PropertyBlock = new MaterialPropertyBlock();
+        m_EmissionColorId = Shader.PropertyToID(m_EmissionColorProperty);
+    }
 
     IEnumerator DoFlash()
     {
-        m_Renderer.material.SetColor(m_EmissionColorProperty, m_FlashColor);
+        m_Renderer.GetPropertyBlock(m_PropertyBlock);
+        m_PropertyBlock.SetColor(m_EmissionColorId, m_FlashColor);
+        m_Renderer.SetPropertyBlock(m_PropertyBlock);
         yield return new WaitForSeconds(m_ColorFlashDuration);
-        m_Renderer.material.SetColor(m_EmissionColorProperty, m_OriginalColor);
+        m_Renderer.SetPropertyBlock(null);
         m_FlashCoroutine = null;
     }
 

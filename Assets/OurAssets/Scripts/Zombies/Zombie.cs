@@ -16,6 +16,10 @@ public class Zombie : MonoBehaviour
     float m_Speed = 5f;
     [SerializeField]
     float m_BaseDamage = 10f;
+#if UNITY_EDITOR
+    [SerializeField]
+    bool m_Debug;
+#endif
 
     float m_Damage;
 
@@ -35,15 +39,20 @@ public class Zombie : MonoBehaviour
         m_RB = GetComponent<Rigidbody>();
         m_Capsule = GetComponent<CapsuleCollider>();
         m_HitFlash = GetComponent<HitFlashComponent>();
+#if UNITY_EDITOR
+        HealthComponent healthComponent = GetComponent<HealthComponent>();
+        healthComponent.InitHealth();
+        healthComponent.OnDamageTaken.AddListener(() => m_HitFlash.Flash());
+#endif
     }
 
     public void Init(FirstPersonPlayerCharacter player, float healthMult, float damageMult)
     {
         m_Player = player;
         m_Damage = m_BaseDamage * damageMult;
-        GetComponent<HealthComponent>().InitHealth(healthMult);
-        GetComponent<AnimatedMesh>().Play("run");
         HealthComponent healthComponent = GetComponent<HealthComponent>();
+        healthComponent.InitHealth(healthMult);
+        GetComponent<AnimatedMesh>().Play("run");
         healthComponent.OnDeath.AddListener(() =>
         {
             EnemyManager.Instance.ZombieDied(this);
