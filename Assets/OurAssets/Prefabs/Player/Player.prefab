@@ -8099,7 +8099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5a2dd1b9b097414088599d96fe82c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MenuHandler
-  m_MainScreen: {fileID: 0}
+  m_MainScreen: {fileID: 1478530468651754252}
 --- !u!1 &8613187365653484719
 GameObject:
   m_ObjectHideFlags: 0

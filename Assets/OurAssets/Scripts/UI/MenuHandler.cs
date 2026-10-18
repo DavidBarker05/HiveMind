@@ -9,6 +9,8 @@ public class MenuHandler : MonoBehaviour
     readonly HashSet<GameObject> m_AdditionalScreens = new HashSet<GameObject>();
     GameObject m_CurrentScreen;
 
+    void OnEnable() => m_CurrentScreen = m_MainScreen;
+
     public void OpenScreen(GameObject screen)
     {
         if (!screen || m_CurrentScreen != m_MainScreen) return;
