@@ -19,6 +19,7 @@ public class UpgradeSystem : MonoBehaviour
     }
 
     public UnityEvent OnLevelPointsChanged;
+    public System.Action<UpgradeType> OnUpgradePurchased;
 
     int m_LevelPoints = 0;
     readonly Dictionary<UpgradeType, int> m_UpgradesPurchased = new Dictionary<UpgradeType, int>();
@@ -42,6 +43,7 @@ public class UpgradeSystem : MonoBehaviour
         if (!m_UpgradesPurchased.ContainsKey(upgrade.UpgradeType)) m_UpgradesPurchased.Add(upgrade.UpgradeType, 1);
         else ++m_UpgradesPurchased[upgrade.UpgradeType];
         OnLevelPointsChanged?.Invoke();
+        OnUpgradePurchased?.Invoke(upgrade.UpgradeType);
     }
 
     public bool HasBeenPurchased(Upgrade upgrade) => m_UpgradesPurchased.ContainsKey(upgrade.UpgradeType);
