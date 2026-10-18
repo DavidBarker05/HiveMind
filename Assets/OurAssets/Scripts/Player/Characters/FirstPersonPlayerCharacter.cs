@@ -96,13 +96,13 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         _ => string.Empty
     };
 
-    static IEnumerator ReloadCheckEnd(FirstPersonPlayerCharacter self, Gun gun) => gun switch
+    static string IdleAnimation(Weapon weapon) => weapon switch
     {
-        Pistol => self.CheckForPistolReloadEnd(),
-        Rifle => self.CheckForRifleReloadEnd(),
-        GrenadeLauncher => self.CheckForGrenadeLauncherReloadEnd(),
-        Shotgun => self.CheckForShotgunReloadEnd(),
-        _ => null
+        Pistol => "PistolIdle",
+        Rifle => "RifleIdle",
+        GrenadeLauncher => "GrenadeLauncherIdle",
+        Shotgun => "ShotgunIdle",
+        _ => string.Empty
     };
 
     [SerializeField]
@@ -156,6 +156,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         m_PausePlayerCharacter = initData.PausePlayerCharacter;
         m_Camera = initData.Camera;
         m_WeaponComponent.Init();
+        PlayIdle();
         m_HealthComponent.InitHealth();
         UpgradeSystem.Instance.OnUpgradePurchased += m_HealthComponent.OnUpgradePurchased;
         HasBeenInitialised = true;
@@ -364,11 +365,11 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         Gun gun = m_WeaponComponent.CurrentGun;
         if (!gun || gun.MagazineFull || gun.ReserveAmmo <= 0 || m_bReloading) return;
         string reloadAnim = ReloadAnimation(gun);
-        IEnumerator reloadEndCheck = ReloadCheckEnd(this, gun);
-        if (string.IsNullOrEmpty(reloadAnim) || reloadEndCheck == null) return;
+        if (string.IsNullOrEmpty(reloadAnim)) return;
         m_ArmsAnimator.Play(reloadAnim, -1, 0f);
+        m_ArmsAnimator.Update(0f);
         m_bReloading = true;
-        StartCoroutine(reloadEndCheck);
+        StartCoroutine(CheckForReloadEnd(gun, reloadAnim));
         if (gun is Rifle rifle) rifle.StopAttacking();
     }
 
@@ -390,7 +391,9 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     void TrySwitchWeapon(ref FirstPersonPlayerCharacterUpdateData updateData)
     {
-        if (updateData.EquipTarget != null && m_WeaponComponent.Equip(updateData.EquipTarget)) CancelReload();
+        if (updateData.EquipTarget == null || !m_WeaponComponent.Equip(updateData.EquipTarget)) return;
+        CancelReload();
+        PlayIdle();
     }
 
     void CancelReload()
@@ -402,86 +405,57 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     #endregion Weapons
 
     #region Animations
-    IEnumerator CheckForPistolReloadEnd()
+    void PlayIdle()
     {
-        AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
-        while (m_WeaponComponent.CurrentGun
-            && m_bReloading
-            && m_WeaponComponent.CurrentGun is Pistol
-            && stateInfo.IsName("PistolReload") && stateInfo.normalizedTime < 1.0f)
-        {
-            stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
-            yield return null;
-        }
-        m_bReloading = false;
-        if (m_bReloadCancelled) m_bReloadCancelled = false;
-        else if (m_WeaponComponent.CurrentGun is Pistol pistol) pistol.Reload();
+        Gun gun = m_WeaponComponent.CurrentGun;
+        if (!gun) return;
+        string idleAnim = IdleAnimation(gun);
+        if (!string.IsNullOrEmpty(idleAnim)) m_ArmsAnimator.Play(idleAnim, -1, 0f);
     }
 
-    IEnumerator CheckForRifleReloadEnd()
+    IEnumerator CheckForReloadEnd(Gun gun, string reloadAnim)
     {
         AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
-        while (m_WeaponComponent.CurrentGun
+        while (m_WeaponComponent.CurrentGun == gun
             && m_bReloading
-            && m_WeaponComponent.CurrentGun is Rifle
-            && stateInfo.IsName("RifleReload") && stateInfo.normalizedTime < 1.0f)
+            && stateInfo.IsName(reloadAnim) && stateInfo.normalizedTime < 1.0f)
         {
             stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
             yield return null;
         }
         m_bReloading = false;
-        if (m_bReloadCancelled) m_bReloadCancelled = false;
-        else if (m_WeaponComponent.CurrentGun is Rifle rifle) rifle.Reload();
-    }
-
-    IEnumerator CheckForGrenadeLauncherReloadEnd()
-    {
-        AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
-        while (m_WeaponComponent.CurrentGun
-            && m_bReloading
-            && m_WeaponComponent.CurrentGun is GrenadeLauncher
-            && stateInfo.IsName("GrenadeLauncherReload") && stateInfo.normalizedTime < 1.0f)
+        if (m_bReloadCancelled)
         {
-            stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
-            yield return null;
+            m_bReloadCancelled = false;
+            yield break;
         }
-        m_bReloading = false;
-        if (m_bReloadCancelled) m_bReloadCancelled = false;
-        else if (m_WeaponComponent.CurrentGun is GrenadeLauncher grenadeLauncher) grenadeLauncher.Reload();
-    }
-
-    IEnumerator CheckForShotgunReloadEnd()
-    {
-        AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
-        while (m_WeaponComponent.CurrentGun
-            && m_bReloading
-            && m_WeaponComponent.CurrentGun is Shotgun
-            && stateInfo.IsName("ShotgunReload") && stateInfo.normalizedTime < 1.0f)
-        {
-            stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
-            yield return null;
-        }
-        m_bReloading = false;
-        if (m_bReloadCancelled) m_bReloadCancelled = false;
-        else if (m_WeaponComponent.CurrentGun is Shotgun shotgun) shotgun.Reload();
+        if (m_WeaponComponent.CurrentGun != gun) yield break;
+        gun.Reload();
+        PlayIdle();
     }
 
     IEnumerator CheckForMeleeAttackEnd(string attackAnim)
     {
         int framesToEnter = 2;
         bool bEntered = false;
+        bool bFinished = false;
         while (true)
         {
             AnimatorStateInfo stateInfo = m_ArmsAnimator.GetCurrentAnimatorStateInfo(0);
             if (stateInfo.IsName(attackAnim))
             {
                 bEntered = true;
-                if (stateInfo.normalizedTime >= 1.0f) break;
+                if (stateInfo.normalizedTime >= 1.0f)
+                {
+                    bFinished = true;
+                    break;
+                }
             }
             else if (bEntered || --framesToEnter < 0) break;
             yield return null;
         }
         m_bMeleeing = false;
+        if (bFinished && !m_bReloading) PlayIdle();
     }
     #endregion
 }
