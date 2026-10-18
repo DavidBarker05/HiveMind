@@ -12,6 +12,8 @@ public class Rifle : Gun
     float m_MaxSpread = 1.5f;
     [SerializeField, Min(0f)]
     float m_RecoveryRate = 4f;
+    [SerializeField]
+    ParticleSystem m_MuzzleFlash;
 
     float m_CurrentSpread;
     bool m_bAttacking = false;
@@ -45,6 +47,7 @@ public class Rifle : Gun
         }
         m_CurrentSpread = Mathf.Min(m_CurrentSpread + m_SpreadPerShot, m_MaxSpread);
         m_bAttacking = true;
+        m_MuzzleFlash.Play();
         return true;
     }
 
