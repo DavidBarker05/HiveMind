@@ -90,6 +90,13 @@ public class WeaponHandlerComponent : MonoBehaviour
         return true;
     }
 
+    public void PickupAmmo<T>() where T : Gun
+    {
+        Type t = typeof(T);
+        if (m_Guns.ContainsKey(t))
+            m_Guns[t].PickupMagazine();
+    }
+
     void OnUpgradePurchased(UpgradeType upgradeType)
     {
         switch (upgradeType)
