@@ -106,8 +106,6 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     };
 
     [SerializeField]
-    GameObject m_Arms;
-    [SerializeField]
     Animator m_ArmsAnimator;
     [SerializeField]
     GameObject m_HUD;
@@ -143,6 +141,9 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     public override string ActionMap => "Player";
     public override bool MouseVisible => false;
     public override bool DoCameraRotation => true;
+
+    AnimationClip m_CurrentAnimation;
+    float m_CurrentAnimationPlayTime;
 
     PausePlayerCharacter m_PausePlayerCharacter;
     MenuPlayerCharacter m_MenuPlayerCharacter;
@@ -189,13 +190,13 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     public override void OnCharacterEnter()
     {
         Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
-        if (m_Arms) m_Arms.SetActive(true);
+        if (m_ArmsAnimator) m_ArmsAnimator.speed = 1f;
     }
 
     public override void OnCharacterExit()
     {
         Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
-        if (m_Arms) m_Arms.SetActive(false);
+        if (m_ArmsAnimator) m_ArmsAnimator.speed = 0f;
     }
 
     void OnDeath() => m_MenuPlayerCharacter.OnMenuOpen(this, m_HUD, m_DeathScreen);
