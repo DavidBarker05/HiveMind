@@ -6,8 +6,8 @@ using Util.SystemUtils;
 public class FirstPersonPlayerCharacterInitData : IPlayerCharacterInitData
 {
     public CharacterSettings CharacterSettings { get; set; }
-    public Player Player { get; set; }
     public PausePlayerCharacter PausePlayerCharacter { get; set; }
+    public MenuPlayerCharacter MenuPlayerCharacter { get; set; }
 
     public Camera Camera { get; set; }
 }
@@ -109,6 +109,10 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     GameObject m_Arms;
     [SerializeField]
     Animator m_ArmsAnimator;
+    [SerializeField]
+    GameObject m_HUD;
+    [SerializeField]
+    GameObject m_DeathScreen;
 
     Camera m_Camera;
     CharacterSettings m_CharacterSettings;
@@ -141,15 +145,7 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
     public override bool DoCameraRotation => true;
 
     PausePlayerCharacter m_PausePlayerCharacter;
-
-    void Awake() => CacheComponents();
-
-    void CacheComponents()
-    {
-        if (!m_CC) m_CC = GetComponent<CharacterController>();
-        if (!m_WeaponComponent) m_WeaponComponent = GetComponent<WeaponHandlerComponent>();
-        if (!m_HealthComponent) m_HealthComponent = GetComponent<HealthComponent>();
-    }
+    MenuPlayerCharacter m_MenuPlayerCharacter;
 
     void OnDestroy()
     {
@@ -159,15 +155,19 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
 
     public override void Init(IPlayerCharacterInitData playerCharacterInitData)
     {
-        CacheComponents();
         FirstPersonPlayerCharacterInitData initData = Sys.AssertType<FirstPersonPlayerCharacterInitData>(playerCharacterInitData, nameof(playerCharacterInitData));
+        m_CC = GetComponent<CharacterController>();
+        m_WeaponComponent = GetComponent<WeaponHandlerComponent>();
+        m_HealthComponent = GetComponent<HealthComponent>();
         m_CharacterSettings = initData.CharacterSettings;
         m_PausePlayerCharacter = initData.PausePlayerCharacter;
+        m_MenuPlayerCharacter = initData.MenuPlayerCharacter;
         m_Camera = initData.Camera;
         m_WeaponComponent.Init();
         PlayIdle();
         m_HealthComponent.InitHealth();
         UpgradeSystem.Instance.OnUpgradePurchased += m_HealthComponent.OnUpgradePurchased;
+        m_HealthComponent.OnDeath.AddListener(OnDeath);
         HasBeenInitialised = true;
     }
 
@@ -197,6 +197,8 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
         Sys.Assert(HasBeenInitialised, "FirstPersonPlayerCharacter hasn't been initialised");
         if (m_Arms) m_Arms.SetActive(false);
     }
+
+    void OnDeath() => m_MenuPlayerCharacter.OnMenuOpen(this, m_HUD, m_DeathScreen);
 
     #region Movement
     void HandleMovement(ref FirstPersonPlayerCharacterUpdateData updateData)
@@ -481,5 +483,5 @@ public class FirstPersonPlayerCharacter : PlayerCharacter
             m_WeaponComponent.CurrentMeleeWeapon.gameObject.SetActive(false);
         }
     }
-    #endregion
+    #endregion Animations
 }

@@ -89,8 +89,8 @@ public class Player : MonoBehaviour
         {
             Camera = m_Camera,
             CharacterSettings = m_PlayerSettings.CharacterSettings,
-            Player = this,
-            PausePlayerCharacter = m_PausePlayerCharacter
+            PausePlayerCharacter = m_PausePlayerCharacter,
+            MenuPlayerCharacter = m_MenuPlayerCharacter
         },
         PausePlayerCharacter => new PausePlayerCharacterInitData() { Player = this },
         MenuPlayerCharacter => new MenuPlayerCharacterInitData() { Player = this },

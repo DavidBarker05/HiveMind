@@ -12,6 +12,7 @@ public class LoadMenuButton : MonoBehaviour
     void Awake() => GetComponent<Button>().onClick.AddListener(() =>
     {
         Time.timeScale = 1f;
+        UpgradeSystem.Instance.ResetProgress();
         m_LoadingScreen.SceneIndexToLoad = m_MainMenuSceneIndex;
         m_LoadingScreen.gameObject.SetActive(true);
     });
